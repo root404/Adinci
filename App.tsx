@@ -100,7 +100,7 @@ export default function App() {
   const [toast, setToast] = useState<string | null>(null);
   const [paymentConfig, setPaymentConfig] = useState<{ zone: AdZone, duration: number, price: string } | null>(null);
   const [chats, setChats] = useState<ChatSession[]>([]);
-  const [authForm, setAuthForm] = useState({ name: '', email: '', password: '', confirmPassword: '', phoneNumber: '' });
+  const [authForm, setAuthForm] = useState({ name: '', email: '', password: '', confirmPassword: '', phoneNumber: '', isVisuallyImpaired: false });
   const [selectedZoneId, setSelectedZoneId] = useState<string | null>(null);
   const [advertiserTargetZone, setAdvertiserTargetZone] = useState<AdZone | null>(null);
   const [isLoadingAuth, setIsLoadingAuth] = useState(false);
@@ -142,6 +142,9 @@ export default function App() {
         
         if (existingUser) {
           setUser(existingUser);
+          if (existingUser.settings.isVisuallyImpaired) {
+            setIsHighContrast(true);
+          }
           setScreen(selectedRole === UserType.REGULAR ? 'map' : 'dashboard');
           setToast(`Welcome back, ${existingUser.name}!`);
         } else {
@@ -155,7 +158,7 @@ export default function App() {
           email: authForm.email, 
           phoneNumber: authForm.phoneNumber, 
           bio: "Just joined Adinci!", 
-          settings: { isVisuallyImpaired: isHighContrast }, 
+          settings: { isVisuallyImpaired: authForm.isVisuallyImpaired || isHighContrast }, 
           points: 0, 
           inventory: [], 
           balance: selectedRole === UserType.ADVERTISER ? 500 : 0, 
@@ -560,19 +563,42 @@ export default function App() {
                          </div>
 
                          {authMode === 'signup' && (
-                            <div className="space-y-1">
-                               <label className="text-[10px] font-black opacity-40 uppercase tracking-widest ml-1">Confirm Password</label>
-                               <div className="relative">
-                                  <Shield className="absolute left-4 top-1/2 -translate-y-1/2 opacity-30" size={16}/>
-                                  <input 
-                                     type={showPassword ? "text" : "password"} 
-                                     placeholder="••••••••" 
-                                     value={authForm.confirmPassword}
-                                     onChange={e => setAuthForm({...authForm, confirmPassword: e.target.value})}
-                                     className="w-full pl-11 pr-4 py-3.5 rounded-2xl bg-gray-50 border border-gray-100 outline-none focus:border-indigo-600 focus:bg-white transition-all font-bold text-sm"
-                                  />
-                               </div>
-                            </div>
+                            <>
+                              <div className="space-y-1">
+                                 <label className="text-[10px] font-black opacity-40 uppercase tracking-widest ml-1">Confirm Password</label>
+                                 <div className="relative">
+                                    <Shield className="absolute left-4 top-1/2 -translate-y-1/2 opacity-30" size={16}/>
+                                    <input 
+                                       type={showPassword ? "text" : "password"} 
+                                       placeholder="••••••••" 
+                                       value={authForm.confirmPassword}
+                                       onChange={e => setAuthForm({...authForm, confirmPassword: e.target.value})}
+                                       className="w-full pl-11 pr-4 py-3.5 rounded-2xl bg-gray-50 border border-gray-100 outline-none focus:border-indigo-600 focus:bg-white transition-all font-bold text-sm"
+                                    />
+                                 </div>
+                              </div>
+                              {selectedRole === UserType.REGULAR && (
+                                <div className={`flex items-center gap-3 p-3 rounded-2xl border transition-all ${isHighContrast ? 'bg-gray-800 border-yellow-400' : 'bg-gray-50 border-gray-100'}`}>
+                                    <div className="relative flex items-center">
+                                        <input
+                                            type="checkbox"
+                                            id="visualCheck"
+                                            checked={authForm.isVisuallyImpaired}
+                                            onChange={e => {
+                                                const isChecked = e.target.checked;
+                                                setAuthForm({...authForm, isVisuallyImpaired: isChecked});
+                                                if (isChecked && !isHighContrast) setIsHighContrast(true);
+                                                if (!isChecked && isHighContrast) setIsHighContrast(false);
+                                            }}
+                                            className="w-5 h-5 accent-indigo-600 cursor-pointer"
+                                        />
+                                    </div>
+                                    <label htmlFor="visualCheck" className={`text-xs font-black uppercase tracking-wide cursor-pointer flex items-center gap-2 select-none ${isHighContrast ? 'text-yellow-400' : 'text-gray-600'}`}>
+                                        <Eye size={16} /> I am visually impaired / blind
+                                    </label>
+                                </div>
+                              )}
+                            </>
                          )}
 
                          <button 
