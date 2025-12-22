@@ -1,0 +1,7 @@
+{
+  "name": "Copy of Copy of Adinci 4",
+  "description": "Location-based rewarded advertising platform prototype with accessibility features.",
+  "requestFramePermissions": [
+    "geolocation"
+  ]
+}
