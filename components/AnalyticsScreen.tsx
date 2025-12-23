@@ -42,25 +42,25 @@ export const AnalyticsScreen: React.FC<AnalyticsProps> = ({ isHighContrast }) =>
 
       <div className="grid grid-cols-2 gap-4">
         <div className={`p-4 rounded-xl ${isHighContrast ? 'bg-gray-900 border border-yellow-400' : 'bg-white shadow'}`}>
-          <p className="text-sm opacity-70">Total Views</p>
+          <p className={`text-sm ${isHighContrast ? 'opacity-70' : 'text-gray-700'}`}>Total Views</p>
           <p className={`text-2xl font-bold ${isHighContrast ? 'text-white' : 'text-blue-600'}`}>
             {totalViews.toLocaleString()}
           </p>
         </div>
         <div className={`p-4 rounded-xl ${isHighContrast ? 'bg-gray-900 border border-yellow-400' : 'bg-white shadow'}`}>
-           <p className="text-sm opacity-70">Conversion Rate</p>
+           <p className={`text-sm ${isHighContrast ? 'opacity-70' : 'text-gray-700'}`}>Conversion Rate</p>
            <p className={`text-2xl font-bold ${isHighContrast ? 'text-yellow-400' : 'text-green-600'}`}>
              {conversionRate}%
            </p>
         </div>
         <div className={`p-4 rounded-xl ${isHighContrast ? 'bg-gray-900 border border-yellow-400' : 'bg-white shadow'}`}>
-           <p className="text-sm opacity-70">Avg Pts / Ad</p>
+           <p className={`text-sm ${isHighContrast ? 'opacity-70' : 'text-gray-700'}`}>Avg Pts / Ad</p>
            <p className={`text-2xl font-bold ${isHighContrast ? 'text-white' : 'text-purple-600'}`}>
              {avgPointsPerRedemption}
            </p>
         </div>
         <div className={`p-4 rounded-xl ${isHighContrast ? 'bg-gray-900 border border-yellow-400' : 'bg-white shadow'}`}>
-           <p className="text-sm opacity-70">Total Distributed</p>
+           <p className={`text-sm ${isHighContrast ? 'opacity-70' : 'text-gray-700'}`}>Total Distributed</p>
            <p className={`text-2xl font-bold ${isHighContrast ? 'text-yellow-400' : 'text-orange-600'}`}>
              {totalPoints.toLocaleString()}
            </p>

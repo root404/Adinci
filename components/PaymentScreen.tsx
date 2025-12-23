@@ -42,7 +42,7 @@ export const PaymentScreen: React.FC<PaymentScreenProps> = ({
         </button>
         <div className="flex-1 text-center pr-10">
            <h1 className="text-lg font-bold">Secure Checkout</h1>
-           <div className="flex items-center justify-center gap-1 text-[10px] opacity-60">
+           <div className={`flex items-center justify-center gap-1 text-[10px] ${isHighContrast ? 'opacity-60' : 'text-gray-600'}`}>
              <Lock size={10} />
              <span>256-bit SSL Encrypted</span>
            </div>
@@ -54,7 +54,7 @@ export const PaymentScreen: React.FC<PaymentScreenProps> = ({
           {/* Order Summary Card */}
           <div className={`${cardClass} rounded-xl overflow-hidden`}>
              <div className={`px-4 py-3 border-b ${isHighContrast ? 'bg-gray-800 border-gray-700' : 'bg-gray-50 border-gray-100'}`}>
-                <h2 className="text-sm font-bold uppercase tracking-wide opacity-70">Order Details</h2>
+                <h2 className={`text-sm font-bold uppercase tracking-wide ${isHighContrast ? 'opacity-70' : 'text-gray-700'}`}>Order Details</h2>
              </div>
              
              <div className="p-4 space-y-4">
@@ -65,7 +65,7 @@ export const PaymentScreen: React.FC<PaymentScreenProps> = ({
                       </div>
                       <div>
                         <p className="font-bold text-sm">Zone: {zone.name}</p>
-                        <p className="text-xs opacity-60">
+                        <p className={`text-xs ${isHighContrast ? 'opacity-60' : 'text-gray-600'}`}>
                            {zone.shape === 'CIRCLE' ? `${Math.round(Math.PI * zone.radius * zone.radius)} m² (Circle)` : `${Math.round(zone.width * zone.height)} m² (Rect)`}
                         </p>
                       </div>
@@ -79,7 +79,7 @@ export const PaymentScreen: React.FC<PaymentScreenProps> = ({
                       </div>
                       <div>
                         <p className="font-bold text-sm">Duration</p>
-                        <p className="text-xs opacity-60">{durationMonths} Month{durationMonths > 1 ? 's' : ''} Plan</p>
+                        <p className={`text-xs ${isHighContrast ? 'opacity-60' : 'text-gray-600'}`}>{durationMonths} Month{durationMonths > 1 ? 's' : ''} Plan</p>
                       </div>
                    </div>
                    <span className="font-bold">{durationMonths} mo</span>
@@ -95,7 +95,7 @@ export const PaymentScreen: React.FC<PaymentScreenProps> = ({
           {/* Payment Method Card */}
           <div className={`${cardClass} rounded-xl overflow-hidden`}>
              <div className={`px-4 py-3 border-b ${isHighContrast ? 'bg-gray-800 border-gray-700' : 'bg-gray-50 border-gray-100'}`}>
-                <h2 className="text-sm font-bold uppercase tracking-wide opacity-70">Payment Method</h2>
+                <h2 className={`text-sm font-bold uppercase tracking-wide ${isHighContrast ? 'opacity-70' : 'text-gray-700'}`}>Payment Method</h2>
              </div>
              <div className="p-4 flex items-center justify-between">
                 <div className="flex items-center gap-3">
@@ -104,14 +104,14 @@ export const PaymentScreen: React.FC<PaymentScreenProps> = ({
                    </div>
                    <div>
                       <p className="font-bold text-sm">•••• 4242</p>
-                      <p className="text-xs opacity-60">Expires 12/25</p>
+                      <p className={`text-xs ${isHighContrast ? 'opacity-60' : 'text-gray-600'}`}>Expires 12/25</p>
                    </div>
                 </div>
                 <button className="text-blue-500 font-bold text-sm">Change</button>
              </div>
           </div>
           
-          <div className="flex items-center justify-center gap-2 opacity-50 text-xs py-2">
+          <div className={`flex items-center justify-center gap-2 text-xs py-2 ${isHighContrast ? 'opacity-50' : 'text-gray-600'}`}>
              <ShieldCheck size={14} />
              <p>Payment is processed securely. No refund after 24h.</p>
           </div>

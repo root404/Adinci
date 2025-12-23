@@ -137,7 +137,8 @@ export const MapView: React.FC<MapViewProps> = ({
         {zones.map((zone) => {
           const isSelected = zone.id === selectedZoneId;
           const liveZone = isSelected && editingZone ? editingZone : zone;
-          const color = isSelected ? '#4f46e5' : (zone.isActive ? '#22c55e' : '#9ca3af');
+          // Updated active color to Blue (#3b82f6)
+          const color = isSelected ? '#4f46e5' : (zone.isActive ? '#3b82f6' : '#9ca3af');
           
           return (
             <React.Fragment key={zone.id}>
@@ -211,12 +212,12 @@ export const MapView: React.FC<MapViewProps> = ({
                  <div className="flex-1 truncate">
                     <h3 className="font-black text-2xl flex items-center gap-2 truncate">
                        {editingZone.name}
-                       <button onClick={() => setIsEditingName(true)} className="opacity-30 hover:opacity-100"><Edit2 size={16}/></button>
+                       <button onClick={() => setIsEditingName(true)} className="opacity-100 text-gray-600 hover:text-gray-900"><Edit2 size={16}/></button>
                     </h3>
-                    <p className="text-[10px] font-black uppercase opacity-40 tracking-widest mt-1">Managed Digital Location</p>
+                    <p className={`text-[10px] font-black uppercase tracking-widest mt-1 ${isHighContrast ? 'opacity-40' : 'text-gray-500'}`}>Managed Digital Location</p>
                  </div>
               )}
-              <button onClick={() => setSelectedZoneId(null)} className="p-3 bg-gray-50 dark:bg-gray-800 rounded-full text-gray-400 hover:bg-gray-100 transition-colors ml-4 shrink-0"><X size={20}/></button>
+              <button onClick={() => setSelectedZoneId(null)} className="p-3 bg-gray-50 dark:bg-gray-800 rounded-full text-gray-600 hover:bg-gray-100 transition-colors ml-4 shrink-0"><X size={20}/></button>
            </div>
            
            {userType === UserType.ZONE_OWNER ? (
@@ -224,7 +225,7 @@ export const MapView: React.FC<MapViewProps> = ({
                  {/* Area & Scaling */}
                  <div className="bg-gray-50 dark:bg-gray-800 p-5 rounded-[28px] border border-gray-100 dark:border-gray-700 space-y-5">
                     <div className="flex justify-between items-center">
-                       <span className="text-[11px] font-black uppercase opacity-50 tracking-widest flex items-center gap-2">
+                       <span className={`text-[11px] font-black uppercase tracking-widest flex items-center gap-2 ${isHighContrast ? 'opacity-50' : 'text-gray-600'}`}>
                           <Maximize size={14} className="text-indigo-600"/> Zone Coverage
                        </span>
                        <div className={`px-4 py-1.5 rounded-2xl text-xs font-black flex items-center gap-2 transition-all ${currentArea < MIN_ZONE_AREA ? 'bg-red-100 text-red-600' : 'bg-green-600 text-white'}`}>
@@ -235,11 +236,11 @@ export const MapView: React.FC<MapViewProps> = ({
 
                     {editingZone.shape === 'CIRCLE' ? (
                        <div className="space-y-3">
-                          <div className="flex justify-between text-[11px] font-bold text-gray-500 uppercase tracking-tighter">
+                          <div className="flex justify-between text-[11px] font-bold text-gray-600 uppercase tracking-tighter">
                              <span>Radius (m)</span>
                              <div className="flex items-center gap-2">
                                 <span className="text-indigo-600 font-black">{editingZone.radius}m</span>
-                                <span className={`font-black text-[9px] px-2 py-0.5 rounded-full transition-colors ${currentArea < MIN_ZONE_AREA ? 'bg-red-100 text-red-600' : 'bg-gray-100 dark:bg-gray-700 opacity-40'}`}>
+                                <span className={`font-black text-[9px] px-2 py-0.5 rounded-full transition-colors ${currentArea < MIN_ZONE_AREA ? 'bg-red-100 text-red-600' : 'bg-gray-100 dark:bg-gray-700 text-gray-500'}`}>
                                   {currentArea} m²
                                 </span>
                              </div>
@@ -253,11 +254,11 @@ export const MapView: React.FC<MapViewProps> = ({
                     ) : (
                        <div className="space-y-5">
                           <div className="space-y-3">
-                             <div className="flex justify-between text-[11px] font-bold text-gray-500 uppercase tracking-tighter">
+                             <div className="flex justify-between text-[11px] font-bold text-gray-600 uppercase tracking-tighter">
                                 <span>Width (m)</span>
                                 <div className="flex items-center gap-2">
                                    <span className="text-indigo-600 font-black">{editingZone.width}m</span>
-                                   <span className={`font-black text-[9px] px-2 py-0.5 rounded-full transition-colors ${currentArea < MIN_ZONE_AREA ? 'bg-red-100 text-red-600' : 'bg-gray-100 dark:bg-gray-700 opacity-40'}`}>
+                                   <span className={`font-black text-[9px] px-2 py-0.5 rounded-full transition-colors ${currentArea < MIN_ZONE_AREA ? 'bg-red-100 text-red-600' : 'bg-gray-100 dark:bg-gray-700 text-gray-500'}`}>
                                       {currentArea} m²
                                    </span>
                                 </div>
@@ -269,11 +270,11 @@ export const MapView: React.FC<MapViewProps> = ({
                              />
                           </div>
                           <div className="space-y-3">
-                             <div className="flex justify-between text-[11px] font-bold text-gray-500 uppercase tracking-tighter">
+                             <div className="flex justify-between text-[11px] font-bold text-gray-600 uppercase tracking-tighter">
                                 <span>Height (m)</span>
                                 <div className="flex items-center gap-2">
                                    <span className="text-indigo-600 font-black">{editingZone.height}m</span>
-                                   <span className={`font-black text-[9px] px-2 py-0.5 rounded-full transition-colors ${currentArea < MIN_ZONE_AREA ? 'bg-red-100 text-red-600' : 'bg-gray-100 dark:bg-gray-700 opacity-40'}`}>
+                                   <span className={`font-black text-[9px] px-2 py-0.5 rounded-full transition-colors ${currentArea < MIN_ZONE_AREA ? 'bg-red-100 text-red-600' : 'bg-gray-100 dark:bg-gray-700 text-gray-500'}`}>
                                       {currentArea} m²
                                    </span>
                                 </div>
@@ -292,7 +293,7 @@ export const MapView: React.FC<MapViewProps> = ({
                         <AlertTriangle size={24} className="text-red-500 shrink-0" />
                         <div className="text-[11px] font-bold text-red-600 leading-snug">
                           Minimum Required: {MIN_ZONE_AREA} m².<br/>
-                          <span className="font-normal opacity-80 text-[10px]">Your zone is too small to activate. Please enlarge it.</span>
+                          <span className="font-normal text-gray-600 text-[10px]">Your zone is too small to activate. Please enlarge it.</span>
                         </div>
                       </div>
                     )}
@@ -300,10 +301,10 @@ export const MapView: React.FC<MapViewProps> = ({
 
                  <div className="space-y-4">
                     <div className="flex justify-between items-center px-1">
-                       <p className="text-[11px] font-black uppercase opacity-40 tracking-widest flex items-center gap-2">
-                          <Calculator size={14}/> Pricing Plans
+                       <p className={`text-[11px] font-black uppercase tracking-widest flex items-center gap-2 ${isHighContrast ? 'opacity-40' : 'text-gray-600'}`}>
+                          <Calculator size={14} className="text-gray-600"/> Pricing Plans
                        </p>
-                       <span className="text-[9px] font-black opacity-30">$0.0025 / m² / month</span>
+                       <span className={`text-[9px] font-black ${isHighContrast ? 'opacity-30' : 'text-gray-500'}`}>$0.0025 / m² / month</span>
                     </div>
 
                     <div className="space-y-3">
@@ -330,15 +331,15 @@ export const MapView: React.FC<MapViewProps> = ({
                                  <div className="absolute -top-2 right-6 bg-indigo-600 text-white text-[7px] font-black px-2 py-0.5 rounded-full uppercase tracking-widest shadow-sm">Suggested</div>
                                )}
                                <div className="flex flex-col items-start">
-                                  <span className="text-[9px] font-black uppercase opacity-60 tracking-tighter mb-1">{plan.tag}</span>
-                                  <span className="text-base font-black group-hover:text-indigo-600">{plan.label}</span>
-                                  <span className="text-[10px] opacity-40 font-bold uppercase mt-1 tracking-tight">
+                                  <span className={`text-[9px] font-black uppercase tracking-tighter mb-1 ${isHighContrast ? 'opacity-60' : 'text-gray-600'}`}>{plan.tag}</span>
+                                  <span className="text-base font-black group-hover:text-indigo-600 text-gray-800">{plan.label}</span>
+                                  <span className={`text-[10px] font-bold uppercase mt-1 tracking-tight ${isHighContrast ? 'opacity-40' : 'text-gray-500'}`}>
                                      {plan.months} mo @ {currentArea} m²
                                   </span>
                                </div>
                                <div className="text-right">
                                   <span className="block text-2xl font-black text-indigo-700 dark:text-indigo-300 tabular-nums">${totalPrice}</span>
-                                  <span className="text-[9px] font-black opacity-30 uppercase tracking-widest">USD Total</span>
+                                  <span className={`text-[9px] font-black uppercase tracking-widest ${isHighContrast ? 'opacity-30' : 'text-gray-400'}`}>USD Total</span>
                                </div>
                             </button>
                           );
@@ -359,11 +360,11 @@ export const MapView: React.FC<MapViewProps> = ({
               <div className="space-y-6">
                  <div className="grid grid-cols-2 gap-4">
                     <div className="bg-indigo-50 dark:bg-indigo-900/10 p-5 rounded-[24px] border border-indigo-100 dark:border-indigo-900/20">
-                       <p className="text-[11px] font-black opacity-50 uppercase tracking-widest mb-1">CPM Rate</p>
+                       <p className={`text-[11px] font-black uppercase tracking-widest mb-1 ${isHighContrast ? 'opacity-50' : 'text-gray-600'}`}>CPM Rate</p>
                        <p className="text-3xl font-black text-indigo-600 dark:text-indigo-400 tabular-nums">${editingZone.pricePer1k.toFixed(2)}</p>
                     </div>
                     <div className="bg-green-50 dark:bg-green-900/10 p-5 rounded-[24px] border border-green-100 dark:border-green-900/20">
-                       <p className="text-[11px] font-black opacity-50 uppercase tracking-widest mb-1">Reach (est.)</p>
+                       <p className={`text-[11px] font-black uppercase tracking-widest mb-1 ${isHighContrast ? 'opacity-50' : 'text-gray-600'}`}>Reach (est.)</p>
                        <div className="flex items-center gap-2">
                           <TrendingUp size={18} className="text-green-600"/>
                           <p className="text-3xl font-black text-green-700 dark:text-green-400">~1.5k</p>
@@ -382,7 +383,7 @@ export const MapView: React.FC<MapViewProps> = ({
            ) : (
              <div className="py-20 text-center space-y-4">
                 <div className="w-20 h-20 bg-gray-50 dark:bg-gray-800 rounded-full flex items-center justify-center mx-auto border-4 border-white dark:border-gray-900 shadow-inner">
-                   <Info size={40} className="text-gray-300" />
+                   <Info size={40} className="text-gray-400" />
                 </div>
                 <div className="space-y-1">
                    <p className="text-base font-black text-gray-400 uppercase tracking-wide">Zone Inactive</p>

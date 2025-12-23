@@ -96,23 +96,23 @@ export const AdvertiserDashboard: React.FC<AdvertiserDashboardProps> = ({
     return (
       <div className={`h-full flex flex-col p-4 pb-20 overflow-y-auto ${isHighContrast ? 'bg-black' : 'bg-gray-50'}`}>
          <div className="flex items-center gap-2 mb-6">
-            <button onClick={() => { setIsCreating(false); setSelectedZone(null); }} className="p-2"><ArrowRight className="rotate-180"/></button>
+            <button onClick={() => { setIsCreating(false); setSelectedZone(null); }} className="p-2"><ArrowRight className="rotate-180 text-gray-700"/></button>
             <h2 className="text-xl font-bold">New Campaign</h2>
          </div>
          <div className={`${cardClass} p-5 rounded-3xl space-y-5 shadow-xl`}>
             <div className="bg-indigo-50/50 p-5 rounded-2xl border border-indigo-100/50">
                <div className="flex justify-between items-center mb-3">
-                  <p className="text-[10px] font-black opacity-60 uppercase tracking-widest">Reach & Budget</p>
+                  <p className={`text-[10px] font-black uppercase tracking-widest ${isHighContrast ? 'opacity-60' : 'text-gray-600'}`}>Reach & Budget</p>
                   <span className="text-xs font-black text-indigo-600">${selectedZone.pricePer1k.toFixed(2)} CPM</span>
                </div>
                <input type="range" min="1000" max="25000" step="1000" value={targetViews} onChange={e => setTargetViews(parseInt(e.target.value))} className="w-full accent-indigo-600" />
                <div className="flex justify-between mt-3">
                   <div className="flex flex-col">
-                    <span className="text-[9px] font-bold opacity-40 uppercase">Impressions</span>
+                    <span className={`text-[9px] font-bold uppercase ${isHighContrast ? 'opacity-40' : 'text-gray-500'}`}>Impressions</span>
                     <span className="text-lg font-black">{targetViews.toLocaleString()}</span>
                   </div>
                   <div className="flex flex-col items-end">
-                    <span className="text-[9px] font-bold opacity-40 uppercase">Proposal Total</span>
+                    <span className={`text-[9px] font-bold uppercase ${isHighContrast ? 'opacity-40' : 'text-gray-500'}`}>Proposal Total</span>
                     <span className="text-lg font-black text-indigo-700">${totalPrice.toFixed(2)}</span>
                   </div>
                </div>
@@ -120,15 +120,15 @@ export const AdvertiserDashboard: React.FC<AdvertiserDashboardProps> = ({
             
             <div className="space-y-4">
                <div className="space-y-1">
-                  <p className="text-[10px] font-black opacity-40 uppercase ml-1">Brand Name</p>
+                  <p className={`text-[10px] font-black uppercase ml-1 ${isHighContrast ? 'opacity-40' : 'text-gray-600'}`}>Brand Name</p>
                   <input placeholder="Who is advertising?" value={newAd.companyName} onChange={e => setNewAd({...newAd, companyName: e.target.value})} className="w-full p-4 rounded-2xl border border-gray-100 bg-gray-50/50 outline-none focus:border-indigo-600 focus:bg-white transition-all font-medium" />
                </div>
                <div className="space-y-1">
-                  <p className="text-[10px] font-black opacity-40 uppercase ml-1">Video Asset URL (Optional)</p>
+                  <p className={`text-[10px] font-black uppercase ml-1 ${isHighContrast ? 'opacity-40' : 'text-gray-600'}`}>Video Asset URL (Optional)</p>
                   <input placeholder="https://..." value={newAd.videoUrl || ''} onChange={e => setNewAd({...newAd, videoUrl: e.target.value})} className="w-full p-4 rounded-2xl border border-gray-100 bg-gray-50/50 outline-none focus:border-indigo-600 focus:bg-white transition-all font-medium" />
                </div>
                <div className="space-y-1">
-                  <p className="text-[10px] font-black opacity-40 uppercase ml-1">AI Content Assistant</p>
+                  <p className={`text-[10px] font-black uppercase ml-1 ${isHighContrast ? 'opacity-40' : 'text-gray-600'}`}>AI Content Assistant</p>
                   <div className="flex gap-2">
                      <input placeholder="Describe your product..." value={productName} onChange={e => setProductName(e.target.value)} className="flex-1 p-4 rounded-2xl border border-gray-100 bg-gray-50/50 outline-none focus:border-indigo-600 focus:bg-white transition-all font-medium" />
                      <button onClick={handleGenerate} className="bg-indigo-600 text-white px-5 rounded-2xl shadow-lg shadow-indigo-100 active:scale-95 transition-all">
@@ -137,11 +137,11 @@ export const AdvertiserDashboard: React.FC<AdvertiserDashboardProps> = ({
                   </div>
                </div>
                <div className="space-y-1">
-                  <p className="text-[10px] font-black opacity-40 uppercase ml-1">Campaign Title</p>
+                  <p className={`text-[10px] font-black uppercase ml-1 ${isHighContrast ? 'opacity-40' : 'text-gray-600'}`}>Campaign Title</p>
                   <input placeholder="Main Headline" value={newAd.title} onChange={e => setNewAd({...newAd, title: e.target.value})} className="w-full p-4 rounded-2xl border border-gray-100 bg-gray-50/50 outline-none focus:border-indigo-600 focus:bg-white transition-all font-bold" />
                </div>
                <div className="space-y-1">
-                  <p className="text-[10px] font-black opacity-40 uppercase ml-1">Promo Details</p>
+                  <p className={`text-[10px] font-black uppercase ml-1 ${isHighContrast ? 'opacity-40' : 'text-gray-600'}`}>Promo Details</p>
                   <textarea placeholder="Tell users why to click..." value={newAd.description} onChange={e => setNewAd({...newAd, description: e.target.value})} className="w-full p-4 rounded-2xl border border-gray-100 bg-gray-50/50 outline-none focus:border-indigo-600 focus:bg-white transition-all text-sm h-24 resize-none" />
                </div>
             </div>
@@ -205,18 +205,18 @@ export const AdvertiserDashboard: React.FC<AdvertiserDashboardProps> = ({
                  
                  <div className="grid grid-cols-2 gap-4">
                    <div className="p-4 rounded-3xl bg-indigo-50/50 border border-indigo-100/50">
-                     <p className="text-[9px] font-black uppercase opacity-40 mb-1 tracking-widest">Proposal</p>
+                     <p className={`text-[9px] font-black uppercase mb-1 tracking-widest ${isHighContrast ? 'opacity-40' : 'text-gray-500'}`}>Proposal</p>
                      <p className="text-xl font-black text-indigo-700">${viewingCampaign.totalPrice.toFixed(2)}</p>
                    </div>
                    <div className="p-4 rounded-3xl bg-green-50/50 border border-green-100/50">
-                     <p className="text-[9px] font-black uppercase opacity-40 mb-1 tracking-widest">Reward</p>
+                     <p className={`text-[9px] font-black uppercase mb-1 tracking-widest ${isHighContrast ? 'opacity-40' : 'text-gray-500'}`}>Reward</p>
                      <p className="text-xl font-black text-green-700">{viewingCampaign.adContent.rewardPoints} Pts</p>
                    </div>
                  </div>
 
                  <div className="space-y-3">
                    <div className="flex justify-between items-end px-1">
-                     <p className="text-[10px] font-black uppercase opacity-40 tracking-widest">Fulfillment Progress</p>
+                     <p className={`text-[10px] font-black uppercase tracking-widest ${isHighContrast ? 'opacity-40' : 'text-gray-500'}`}>Fulfillment Progress</p>
                      <p className="text-xs font-black tabular-nums">{viewingCampaign.currentViews.toLocaleString()} / {viewingCampaign.targetViews.toLocaleString()}</p>
                    </div>
                    <div className={`w-full h-2.5 rounded-full overflow-hidden ${isHighContrast ? 'bg-gray-800' : 'bg-gray-100'}`}>
@@ -246,7 +246,7 @@ export const AdvertiserDashboard: React.FC<AdvertiserDashboardProps> = ({
              </div>
              <div>
                 <h1 className="text-lg font-bold leading-none">Campaigns</h1>
-                <p className="text-[10px] text-gray-500 uppercase font-black tracking-tighter">Advertiser Control Center</p>
+                <p className={`text-[10px] uppercase font-black tracking-tighter ${isHighContrast ? 'text-gray-500' : 'text-gray-600'}`}>Advertiser Control Center</p>
              </div>
           </div>
           <button onClick={onLogout} className="px-4 py-2 text-red-500 font-black text-[11px] uppercase tracking-widest rounded-lg hover:bg-red-50">Log Out</button>
@@ -254,9 +254,9 @@ export const AdvertiserDashboard: React.FC<AdvertiserDashboardProps> = ({
       
       {/* Navigation Sub-Tabs */}
       <div className="flex p-2 gap-2 bg-white border-b border-gray-100">
-        <button onClick={() => setActiveTab('campaigns')} className={`flex-1 py-3 text-[10px] font-black uppercase tracking-widest transition-all rounded-xl ${activeTab === 'campaigns' ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-100' : 'bg-gray-50 text-gray-400'}`}>My Ads</button>
-        <button onClick={() => setActiveTab('marketplace')} className={`flex-1 py-3 text-[10px] font-black uppercase tracking-widest transition-all rounded-xl ${activeTab === 'marketplace' ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-100' : 'bg-gray-50 text-gray-400'}`}>Discovery</button>
-        <button onClick={() => setActiveTab('wallet')} className={`flex-1 py-3 text-[10px] font-black uppercase tracking-widest transition-all rounded-xl ${activeTab === 'wallet' ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-100' : 'bg-gray-50 text-gray-400'}`}>Wallet</button>
+        <button onClick={() => setActiveTab('campaigns')} className={`flex-1 py-3 text-[10px] font-black uppercase tracking-widest transition-all rounded-xl ${activeTab === 'campaigns' ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-100' : 'bg-gray-50 text-gray-600'}`}>My Ads</button>
+        <button onClick={() => setActiveTab('marketplace')} className={`flex-1 py-3 text-[10px] font-black uppercase tracking-widest transition-all rounded-xl ${activeTab === 'marketplace' ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-100' : 'bg-gray-50 text-gray-600'}`}>Discovery</button>
+        <button onClick={() => setActiveTab('wallet')} className={`flex-1 py-3 text-[10px] font-black uppercase tracking-widest transition-all rounded-xl ${activeTab === 'wallet' ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-100' : 'bg-gray-50 text-gray-600'}`}>Wallet</button>
       </div>
 
       <div className="flex-1 overflow-y-auto p-4 pb-28 space-y-6">
@@ -264,20 +264,20 @@ export const AdvertiserDashboard: React.FC<AdvertiserDashboardProps> = ({
             <>
                {/* Categories for Real feel */}
                <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-hide px-1">
-                  <button onClick={() => setStatusFilter('ALL')} className={`px-5 py-2.5 rounded-full text-[10px] font-black uppercase whitespace-nowrap transition-all border ${statusFilter === 'ALL' ? 'bg-gray-900 text-white border-gray-900' : 'bg-white border-gray-200 text-gray-400'}`}>All Ads</button>
-                  <button onClick={() => setStatusFilter('ACTIVE')} className={`px-5 py-2.5 rounded-full text-[10px] font-black uppercase whitespace-nowrap transition-all border ${statusFilter === 'ACTIVE' ? 'bg-green-600 text-white border-green-600' : 'bg-white border-gray-200 text-gray-400'}`}>Approved</button>
-                  <button onClick={() => setStatusFilter('PENDING')} className={`px-5 py-2.5 rounded-full text-[10px] font-black uppercase whitespace-nowrap transition-all border ${statusFilter === 'PENDING' ? 'bg-orange-500 text-white border-orange-500' : 'bg-white border-gray-200 text-gray-400'}`}>Pending</button>
-                  <button onClick={() => setStatusFilter('REJECTED')} className={`px-5 py-2.5 rounded-full text-[10px] font-black uppercase whitespace-nowrap transition-all border ${statusFilter === 'REJECTED' ? 'bg-red-500 text-white border-red-500' : 'bg-white border-gray-200 text-gray-400'}`}>Declined</button>
+                  <button onClick={() => setStatusFilter('ALL')} className={`px-5 py-2.5 rounded-full text-[10px] font-black uppercase whitespace-nowrap transition-all border ${statusFilter === 'ALL' ? 'bg-gray-900 text-white border-gray-900' : 'bg-white border-gray-200 text-gray-600'}`}>All Ads</button>
+                  <button onClick={() => setStatusFilter('ACTIVE')} className={`px-5 py-2.5 rounded-full text-[10px] font-black uppercase whitespace-nowrap transition-all border ${statusFilter === 'ACTIVE' ? 'bg-green-600 text-white border-green-600' : 'bg-white border-gray-200 text-gray-600'}`}>Approved</button>
+                  <button onClick={() => setStatusFilter('PENDING')} className={`px-5 py-2.5 rounded-full text-[10px] font-black uppercase whitespace-nowrap transition-all border ${statusFilter === 'PENDING' ? 'bg-orange-500 text-white border-orange-500' : 'bg-white border-gray-200 text-gray-600'}`}>Pending</button>
+                  <button onClick={() => setStatusFilter('REJECTED')} className={`px-5 py-2.5 rounded-full text-[10px] font-black uppercase whitespace-nowrap transition-all border ${statusFilter === 'REJECTED' ? 'bg-red-500 text-white border-red-500' : 'bg-white border-gray-200 text-gray-600'}`}>Declined</button>
                </div>
 
                {filteredRequests.length === 0 ? (
                   <div className="py-24 text-center space-y-5 animate-in fade-in">
                       <div className="w-20 h-20 bg-gray-200 rounded-full flex items-center justify-center mx-auto shadow-inner border-4 border-white">
-                        <Target size={36} className="text-gray-400" />
+                        <Target size={36} className="text-gray-500" />
                       </div>
                       <div className="space-y-1">
                         <p className="text-sm font-black text-gray-900 uppercase tracking-widest">No Campaigns Found</p>
-                        <p className="text-[11px] opacity-50 max-w-[220px] mx-auto font-bold leading-relaxed">You haven't submitted any ad proposals in this category yet.</p>
+                        <p className={`text-[11px] max-w-[220px] mx-auto font-bold leading-relaxed ${isHighContrast ? 'opacity-50' : 'text-gray-600'}`}>You haven't submitted any ad proposals in this category yet.</p>
                       </div>
                       <button onClick={() => setActiveTab('marketplace')} className="bg-indigo-600 text-white px-8 py-3 rounded-full font-black text-[11px] uppercase tracking-widest shadow-xl shadow-indigo-100 transition-all active:scale-95">Browse Discovery</button>
                   </div>
@@ -301,20 +301,20 @@ export const AdvertiserDashboard: React.FC<AdvertiserDashboardProps> = ({
                                              </span>
                                           </div>
                                           <h4 className="font-black text-lg truncate group-hover:text-indigo-600 transition-colors">{req.adContent.title}</h4>
-                                          <p className="text-[10px] opacity-40 uppercase font-black flex items-center gap-1 mt-0.5 tracking-tighter">
-                                             <Clock size={10}/> Submitted on {new Date(req.createdAt).toLocaleDateString()}
+                                          <p className={`text-[10px] uppercase font-black flex items-center gap-1 mt-0.5 tracking-tighter ${isHighContrast ? 'opacity-40' : 'text-gray-500'}`}>
+                                             <Clock size={10} className="text-gray-600"/> Submitted on {new Date(req.createdAt).toLocaleDateString()}
                                           </p>
                                       </div>
                                       <div className="text-right">
                                          <p className="text-lg font-black text-indigo-700 tabular-nums">${req.totalPrice.toFixed(2)}</p>
-                                         <p className="text-[8px] opacity-40 font-black uppercase tracking-widest">Budget</p>
+                                         <p className={`text-[8px] font-black uppercase tracking-widest ${isHighContrast ? 'opacity-40' : 'text-gray-500'}`}>Budget</p>
                                       </div>
                                   </div>
                                   
                                   <div className="space-y-2.5 mb-6">
                                       <div className="flex justify-between items-center text-[9px] font-black">
-                                          <span className="opacity-30 uppercase tracking-widest">Performance Track</span>
-                                          <span className="tabular-nums opacity-60 font-bold">{req.currentViews.toLocaleString()} / {req.targetViews.toLocaleString()} views</span>
+                                          <span className={`uppercase tracking-widest ${isHighContrast ? 'opacity-30' : 'text-gray-500'}`}>Performance Track</span>
+                                          <span className={`tabular-nums font-bold ${isHighContrast ? 'opacity-60' : 'text-gray-700'}`}>{req.currentViews.toLocaleString()} / {req.targetViews.toLocaleString()} views</span>
                                       </div>
                                       <div className={`w-full h-2 rounded-full overflow-hidden ${isHighContrast ? 'bg-gray-800' : 'bg-gray-100'}`}>
                                           <div 
@@ -333,9 +333,9 @@ export const AdvertiserDashboard: React.FC<AdvertiserDashboardProps> = ({
                                          <div className="w-8 h-8 rounded-full bg-indigo-50 flex items-center justify-center text-indigo-600 font-bold text-[10px]">
                                             {req.adContent.rewardPoints}
                                          </div>
-                                         <span className="text-[9px] font-black opacity-40 uppercase tracking-widest">Points per view</span>
+                                         <span className={`text-[9px] font-black uppercase tracking-widest ${isHighContrast ? 'opacity-40' : 'text-gray-500'}`}>Points per view</span>
                                       </div>
-                                      <div className="flex items-center gap-1 text-[10px] font-black text-indigo-600 opacity-60 group-hover:opacity-100 transition-opacity">
+                                      <div className="flex items-center gap-1 text-[10px] font-black text-indigo-600 group-hover:opacity-100 transition-opacity">
                                          VIEW DETAILS <ChevronRight size={14}/>
                                       </div>
                                   </div>
@@ -382,7 +382,7 @@ export const AdvertiserDashboard: React.FC<AdvertiserDashboardProps> = ({
                                   onClick={() => setAmountToAdd(amt.toString())}
                                   className="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/10 text-white text-xs font-bold transition-all active:scale-95 flex items-center gap-1 group"
                                 >
-                                  <Plus size={10} className="opacity-50 group-hover:opacity-100 transition-opacity"/> ${amt}
+                                  <Plus size={10} className="text-gray-300 group-hover:text-white transition-colors"/> ${amt}
                                 </button>
                             ))}
                           </div>
@@ -398,8 +398,8 @@ export const AdvertiserDashboard: React.FC<AdvertiserDashboardProps> = ({
 
                {/* Add Funds Form */}
                <div className={`${cardClass} p-5 rounded-3xl space-y-4`}>
-                  <h3 className="text-xs font-black uppercase opacity-40 tracking-widest flex items-center gap-2">
-                     <Plus size={14} /> Add Funds
+                  <h3 className={`text-xs font-black uppercase tracking-widest flex items-center gap-2 ${isHighContrast ? 'opacity-40' : 'text-gray-600'}`}>
+                     <Plus size={14} className="text-gray-600" /> Add Funds
                   </h3>
                   <div className="flex gap-3">
                      <div className="relative flex-1">
@@ -409,7 +409,7 @@ export const AdvertiserDashboard: React.FC<AdvertiserDashboardProps> = ({
                            placeholder="0.00" 
                            value={amountToAdd}
                            onChange={(e) => setAmountToAdd(e.target.value)}
-                           className={`w-full pl-8 pr-4 py-3 rounded-2xl outline-none font-bold ${isHighContrast ? 'bg-gray-800' : 'bg-gray-50'}`}
+                           className={`w-full pl-8 pr-4 py-3 rounded-2xl outline-none font-bold ${isHighContrast ? 'bg-gray-800' : 'bg-gray-50 text-gray-900'}`}
                         />
                      </div>
                      <button 
@@ -420,15 +420,15 @@ export const AdvertiserDashboard: React.FC<AdvertiserDashboardProps> = ({
                         {isProcessingPayment ? <Loader2 className="animate-spin" /> : 'Pay'}
                      </button>
                   </div>
-                  <p className="text-[10px] opacity-40 leading-tight">
+                  <p className={`text-[10px] leading-tight ${isHighContrast ? 'opacity-40' : 'text-gray-500'}`}>
                      Secure payment processing powered by Stripe integration (Mock). Funds are available immediately.
                   </p>
                </div>
 
                {/* History */}
                <div className="space-y-4">
-                  <h3 className="text-xs font-black uppercase opacity-40 tracking-widest flex items-center gap-2 px-1">
-                     <History size={14} /> Campaign Transactions
+                  <h3 className={`text-xs font-black uppercase tracking-widest flex items-center gap-2 px-1 ${isHighContrast ? 'opacity-40' : 'text-gray-600'}`}>
+                     <History size={14} className="text-gray-600" /> Campaign Transactions
                   </h3>
                   
                   {rentalRequests.filter(r => r.status === 'ACTIVE' || r.status === 'COMPLETED').length === 0 ? (
@@ -445,12 +445,12 @@ export const AdvertiserDashboard: React.FC<AdvertiserDashboardProps> = ({
                                  </div>
                                  <div>
                                     <h4 className="font-bold text-xs truncate max-w-[150px]">{req.adContent.title}</h4>
-                                    <p className="text-[9px] opacity-40 uppercase font-black">Campaign Deduction</p>
+                                    <p className={`text-[9px] uppercase font-black ${isHighContrast ? 'opacity-40' : 'text-gray-500'}`}>Campaign Deduction</p>
                                  </div>
                               </div>
                               <div className="text-right">
                                  <p className="font-black text-red-500">-${req.totalPrice.toFixed(2)}</p>
-                                 <p className="text-[8px] opacity-30 uppercase">{new Date(req.createdAt).toLocaleDateString()}</p>
+                                 <p className={`text-[8px] uppercase ${isHighContrast ? 'opacity-30' : 'text-gray-400'}`}>{new Date(req.createdAt).toLocaleDateString()}</p>
                               </div>
                            </div>
                         ))
@@ -460,12 +460,12 @@ export const AdvertiserDashboard: React.FC<AdvertiserDashboardProps> = ({
          ) : (
             <>
                <div className="flex justify-between items-center px-1 mb-2">
-                  <h3 className="text-xs font-black uppercase opacity-40 tracking-widest">Explore Ad Spaces</h3>
+                  <h3 className={`text-xs font-black uppercase tracking-widest ${isHighContrast ? 'opacity-40' : 'text-gray-600'}`}>Explore Ad Spaces</h3>
                   <button 
                     onClick={onNavigateToMap}
                     className="flex items-center gap-2 px-4 py-2.5 bg-indigo-600 text-white rounded-2xl text-[10px] font-black uppercase shadow-lg shadow-indigo-100 active:scale-95"
                   >
-                    <MapIcon size={14}/> Live Map
+                    <MapIcon size={14} className="text-white"/> Live Map
                   </button>
                </div>
                
@@ -478,13 +478,13 @@ export const AdvertiserDashboard: React.FC<AdvertiserDashboardProps> = ({
                                <div>
                                  <h3 className="font-black text-xl group-hover:text-indigo-600 transition-colors">{z.name}</h3>
                                  <div className="flex items-center gap-2 mt-1.5">
-                                    <p className="text-[10px] opacity-50 flex items-center gap-1 font-black uppercase bg-gray-50 px-2 py-0.5 rounded-lg border border-gray-100"><MapPin size={10}/> {z.shape}</p>
-                                    <p className="text-[10px] opacity-40 font-black uppercase tracking-tighter">Verified Space</p>
+                                    <p className="text-[10px] opacity-50 flex items-center gap-1 font-black uppercase bg-gray-50 px-2 py-0.5 rounded-lg border border-gray-100"><MapPin size={10} className="text-gray-500"/> {z.shape}</p>
+                                    <p className={`text-[10px] font-black uppercase tracking-tighter ${isHighContrast ? 'opacity-40' : 'text-gray-500'}`}>Verified Space</p>
                                  </div>
                                </div>
                                <div className="text-right">
                                  <p className="text-2xl font-black text-indigo-600 tabular-nums">${z.pricePer1k.toFixed(2)}</p>
-                                 <p className="text-[9px] opacity-40 font-black uppercase tracking-widest">CPM Rate</p>
+                                 <p className={`text-[9px] font-black uppercase tracking-widest ${isHighContrast ? 'opacity-40' : 'text-gray-500'}`}>CPM Rate</p>
                                </div>
                            </div>
                            <button onClick={() => { setSelectedZone(z); setIsCreating(true); }} className="w-full py-4.5 bg-indigo-600 text-white rounded-[20px] font-black text-sm flex items-center justify-center gap-3 shadow-xl shadow-indigo-100 active:scale-95 transition-all">

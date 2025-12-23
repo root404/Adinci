@@ -13,7 +13,7 @@ interface ProfileScreenProps {
 const Section = ({ title, children, isHighContrast }: { title: string, children?: React.ReactNode, isHighContrast: boolean }) => (
   <div className={`mb-6 rounded-xl overflow-hidden ${isHighContrast ? 'bg-gray-900 border border-yellow-400' : 'bg-white shadow-sm'}`}>
     <div className={`px-4 py-3 border-b ${isHighContrast ? 'border-gray-800' : 'border-gray-100 bg-gray-50'}`}>
-      <h3 className={`font-bold text-sm ${isHighContrast ? 'text-yellow-400' : 'text-gray-500 uppercase tracking-wider'}`}>{title}</h3>
+      <h3 className={`font-bold text-sm ${isHighContrast ? 'text-yellow-400' : 'text-gray-800 uppercase tracking-wider'}`}>{title}</h3>
     </div>
     <div>{children}</div>
   </div>
@@ -29,22 +29,22 @@ const Item = ({ icon: Icon, label, value, onClick, toggle, isHighContrast, subte
     }`}
   >
     <div className="flex items-center gap-3">
-      <div className={`p-2 rounded-lg ${isHighContrast ? 'bg-black text-yellow-400' : 'bg-gray-100 text-gray-600'}`}>
+      <div className={`p-2 rounded-lg ${isHighContrast ? 'bg-black text-yellow-400' : 'bg-gray-100 text-gray-700'}`}>
          <Icon size={18} />
       </div>
       <div className="flex flex-col">
         <span className="font-medium">{label}</span>
-        {subtext && <span className={`text-xs ${isHighContrast ? 'text-gray-400' : 'text-gray-500'}`}>{subtext}</span>}
+        {subtext && <span className={`text-xs ${isHighContrast ? 'text-gray-400' : 'text-gray-600'}`}>{subtext}</span>}
       </div>
     </div>
     <div className="flex items-center gap-2">
-       {value && <span className="text-sm opacity-60 text-right max-w-[150px] truncate">{value}</span>}
+       {value && <span className={`text-sm text-right max-w-[150px] truncate ${isHighContrast ? 'opacity-60' : 'text-gray-700'}`}>{value}</span>}
        {toggle !== undefined ? (
            <div className={`w-10 h-6 rounded-full relative transition-colors ${toggle ? (isHighContrast ? 'bg-yellow-400' : 'bg-green-500') : 'bg-gray-300'}`}>
               <div className={`absolute top-1 w-4 h-4 rounded-full bg-white transition-transform ${toggle ? 'left-5' : 'left-1'}`} />
            </div>
        ) : (
-          <ChevronRight size={16} className="opacity-40" />
+          <ChevronRight size={16} className={`${isHighContrast ? 'opacity-40' : 'text-gray-600'}`} />
        )}
     </div>
   </div>
@@ -103,7 +103,7 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ user, onLogout, is
 
   const PrivacyOption = ({ label, value, onChange }: { label: string, value: string, onChange: (val: string) => void }) => (
     <div className={`flex justify-between items-center p-3 rounded ${isHighContrast ? 'bg-gray-800' : 'bg-gray-50'}`}>
-        <span>{label}</span>
+        <span className={isHighContrast ? '' : 'text-gray-800'}>{label}</span>
         <select 
             value={value}
             onChange={(e) => onChange(e.target.value)}
@@ -138,15 +138,15 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ user, onLogout, is
                     onClick={() => updatePrivacy('readReceipts', !readReceipts)}
                  >
                     <div className="flex flex-col">
-                        <span>Read Receipts</span>
-                        <span className="text-[10px] opacity-60">If turned off, you won't send or receive Read Receipts.</span>
+                        <span className={isHighContrast ? '' : 'text-gray-800'}>Read Receipts</span>
+                        <span className={`text-[10px] ${isHighContrast ? 'opacity-60' : 'text-gray-600'}`}>If turned off, you won't send or receive Read Receipts.</span>
                     </div>
                     <div className={`w-10 h-6 rounded-full relative transition-colors flex-shrink-0 ${readReceipts ? (isHighContrast ? 'bg-yellow-400' : 'bg-green-500') : 'bg-gray-300'}`}>
                         <div className={`absolute top-1 w-4 h-4 rounded-full bg-white transition-transform ${readReceipts ? 'left-5' : 'left-1'}`} />
                     </div>
                  </div>
                  
-                 <p className="text-xs opacity-50 text-center pt-2">End-to-end encryption enabled.</p>
+                 <p className="text-xs text-gray-500 text-center pt-2">End-to-end encryption enabled.</p>
               </div>
            );
         case 'help':
@@ -157,8 +157,8 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ user, onLogout, is
                     <p className="text-sm">Need help? Chat with our support team directly from the chat screen.</p>
                  </div>
                  <div className="space-y-2">
-                    <div className="p-3 border rounded">FAQ: How to earn points?</div>
-                    <div className="p-3 border rounded">FAQ: Withdrawing cash</div>
+                    <div className="p-3 border rounded text-gray-700">FAQ: How to earn points?</div>
+                    <div className="p-3 border rounded text-gray-700">FAQ: Withdrawing cash</div>
                  </div>
               </div>
            );
@@ -176,7 +176,7 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ user, onLogout, is
                        <span>EXP 12/25</span>
                     </div>
                  </div>
-                 <button className="w-full py-3 border-2 border-dashed border-gray-300 rounded-xl text-gray-500 font-bold">
+                 <button className="w-full py-3 border-2 border-dashed border-gray-300 rounded-xl text-gray-600 font-bold hover:bg-gray-50">
                     + Add New Method
                  </button>
               </div>
@@ -233,12 +233,12 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({ user, onLogout, is
            <div className="text-center mt-4 px-6">
              <h1 className="text-2xl font-bold flex items-center justify-center gap-2">
                {user.name}
-               <button onClick={() => setIsEditing(true)} className="opacity-50 hover:opacity-100">
+               <button onClick={() => setIsEditing(true)} className={`hover:opacity-100 ${isHighContrast ? 'opacity-50' : 'text-gray-700'}`}>
                  <Edit2 size={16} />
                </button>
              </h1>
-             <p className="opacity-60 text-sm mt-1">{user.phoneNumber || '+971 -- --- ----'}</p>
-             <p className={`mt-3 text-sm px-4 py-1 rounded-full inline-block ${isHighContrast ? 'bg-yellow-400/20 text-yellow-400' : 'bg-gray-100 text-gray-600'}`}>
+             <p className={`text-sm mt-1 ${isHighContrast ? 'opacity-60' : 'text-gray-600'}`}>{user.phoneNumber || '+971 -- --- ----'}</p>
+             <p className={`mt-3 text-sm px-4 py-1 rounded-full inline-block ${isHighContrast ? 'bg-yellow-400/20 text-yellow-400' : 'bg-gray-100 text-gray-700'}`}>
                 {user.bio || 'Hey there! I am using Rewarded AD.'}
              </p>
            </div>

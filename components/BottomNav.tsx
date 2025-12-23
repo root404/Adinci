@@ -17,7 +17,7 @@ export const BottomNav: React.FC<BottomNavProps> = ({ userType, currentScreen, s
   const buttonClass = (isActive: boolean) => `flex flex-col items-center justify-center w-full h-full space-y-1 ${
     isActive 
       ? (isHighContrast ? 'text-yellow-400 font-bold' : 'text-blue-600') 
-      : (isHighContrast ? 'text-white' : 'text-gray-500 hover:text-gray-900')
+      : (isHighContrast ? 'text-white' : 'text-gray-600 hover:text-gray-900')
   }`;
 
   if (userType === UserType.ZONE_OWNER) {

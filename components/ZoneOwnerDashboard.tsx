@@ -130,11 +130,11 @@ export const ZoneOwnerDashboard: React.FC<ZoneOwnerDashboardProps> = ({
            </div>
            <div>
              <h1 className="text-lg font-bold leading-none">{user.name}</h1>
-             <p className="text-[10px] text-gray-500 uppercase font-bold tracking-tight">Zone Owner Account</p>
+             <p className={`text-[10px] uppercase font-bold tracking-tight ${isHighContrast ? 'text-gray-500' : 'text-gray-600'}`}>Zone Owner Account</p>
            </div>
         </div>
         <div className="flex gap-2">
-           <button onClick={() => setActiveTab('requests')} className={`p-2 rounded-full relative ${isHighContrast ? 'text-yellow-400' : 'text-gray-400 hover:bg-gray-100'}`}>
+           <button onClick={() => setActiveTab('requests')} className={`p-2 rounded-full relative ${isHighContrast ? 'text-yellow-400' : 'text-gray-600 hover:bg-gray-100'}`}>
               <Bell size={20} />
               {pendingRequests.length > 0 && <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full border border-white"></span>}
            </button>
@@ -159,7 +159,7 @@ export const ZoneOwnerDashboard: React.FC<ZoneOwnerDashboardProps> = ({
               className={`flex-1 flex flex-col items-center py-2 rounded-lg transition-all relative ${
                 activeTab === tab.id 
                   ? 'bg-indigo-600 text-white shadow-md' 
-                  : 'text-gray-400 hover:bg-gray-50'
+                  : 'text-gray-600 hover:bg-gray-50'
               }`}
             >
               <tab.icon size={18} />
@@ -179,25 +179,25 @@ export const ZoneOwnerDashboard: React.FC<ZoneOwnerDashboardProps> = ({
              <div className="grid grid-cols-2 gap-3">
                 <div className={`${cardClass} p-4 rounded-2xl`}>
                    <div className="flex justify-between items-start mb-2">
-                      <p className="text-[10px] font-black opacity-60 uppercase">Settled Revenue</p>
+                      <p className={`text-[10px] font-black uppercase ${isHighContrast ? 'opacity-60' : 'text-gray-600'}`}>Settled Revenue</p>
                       <ArrowUpRight size={14} className="text-green-500" />
                    </div>
                    <p className="text-2xl font-black">${user.totalEarnings?.toFixed(2)}</p>
-                   <p className="text-[8px] opacity-40 font-bold mt-1">TOTAL EARNED</p>
+                   <p className={`text-[8px] font-bold mt-1 ${isHighContrast ? 'opacity-40' : 'text-gray-500'}`}>TOTAL EARNED</p>
                 </div>
                 <div className={`${cardClass} p-4 rounded-2xl`}>
                    <div className="flex justify-between items-start mb-2">
-                      <p className="text-[10px] font-black opacity-60 uppercase">Active Ads</p>
+                      <p className={`text-[10px] font-black uppercase ${isHighContrast ? 'opacity-60' : 'text-gray-600'}`}>Active Ads</p>
                       <ShieldCheck size={14} className="text-indigo-500" />
                    </div>
                    <p className="text-2xl font-black text-indigo-600">{activeRentals.length}</p>
-                   <p className="text-[8px] opacity-40 font-bold mt-1">CURRENTLY RUNNING</p>
+                   <p className={`text-[8px] font-bold mt-1 ${isHighContrast ? 'opacity-40' : 'text-gray-500'}`}>CURRENTLY RUNNING</p>
                 </div>
              </div>
 
              <div className={`${cardClass} p-5 rounded-2xl`}>
-                <h3 className="text-sm font-black uppercase opacity-60 mb-4 flex items-center gap-2">
-                   <Bell size={16} /> Alerts & Notifications
+                <h3 className={`text-sm font-black uppercase mb-4 flex items-center gap-2 ${isHighContrast ? 'opacity-60' : 'text-gray-700'}`}>
+                   <Bell size={16} className="text-gray-700" /> Alerts & Notifications
                 </h3>
                 <div className="space-y-3">
                    {notifications.map(n => (
@@ -205,7 +205,7 @@ export const ZoneOwnerDashboard: React.FC<ZoneOwnerDashboardProps> = ({
                         <div className={`mt-0.5 w-2 h-2 rounded-full ${n.type === 'request' ? 'bg-indigo-500' : 'bg-gray-300'}`}></div>
                         <div className="flex-1">
                            <p className="text-xs font-medium">{n.text}</p>
-                           <p className="text-[9px] opacity-40 font-bold">{n.time}</p>
+                           <p className={`text-[9px] font-bold ${isHighContrast ? 'opacity-40' : 'text-gray-500'}`}>{n.time}</p>
                         </div>
                      </div>
                    ))}
@@ -218,7 +218,7 @@ export const ZoneOwnerDashboard: React.FC<ZoneOwnerDashboardProps> = ({
         {activeTab === 'zones' && (
            <div className="space-y-4 animate-in fade-in">
               <div className="flex justify-between items-center mb-2">
-                 <h3 className="text-xs font-black uppercase opacity-40 tracking-widest">My Locations</h3>
+                 <h3 className={`text-xs font-black uppercase tracking-widest ${isHighContrast ? 'opacity-40' : 'text-gray-600'}`}>My Locations</h3>
                  <button onClick={onNavigateToMap} className="p-2 bg-indigo-600 text-white rounded-lg text-[10px] font-bold flex items-center gap-1 shadow-lg">
                     <Plus size={12}/> New
                  </button>
@@ -239,15 +239,15 @@ export const ZoneOwnerDashboard: React.FC<ZoneOwnerDashboardProps> = ({
                             {getStatusLabel(z).toUpperCase()}
                           </span>
                        </div>
-                       <button onClick={() => onEditZone?.(z)} className="p-2 text-gray-400"><Edit2 size={16}/></button>
+                       <button onClick={() => onEditZone?.(z)} className="p-2 text-gray-600"><Edit2 size={16}/></button>
                     </div>
                     <div className="p-4 grid grid-cols-2 gap-4">
                         <div className="flex flex-col">
-                           <span className="text-[9px] opacity-40 font-black uppercase">Area</span>
+                           <span className={`text-[9px] font-black uppercase ${isHighContrast ? 'opacity-40' : 'text-gray-500'}`}>Area</span>
                            <span className="text-xs font-bold">{calculateArea(z)} m²</span>
                         </div>
                         <div className="flex flex-col">
-                           <span className="text-[9px] opacity-40 font-black uppercase">Expiry</span>
+                           <span className={`text-[9px] font-black uppercase ${isHighContrast ? 'opacity-40' : 'text-gray-500'}`}>Expiry</span>
                            <span className="text-xs font-bold">{getTimeRemaining(z.expiryDate)}</span>
                         </div>
                     </div>
@@ -260,8 +260,8 @@ export const ZoneOwnerDashboard: React.FC<ZoneOwnerDashboardProps> = ({
         {activeTab === 'analytics' && (
            <div className="space-y-6 animate-in fade-in">
               <div className="flex justify-between items-end px-1">
-                 <h3 className="text-xs font-black uppercase opacity-40 tracking-widest">Performance Dashboard</h3>
-                 <span className="text-[10px] font-bold opacity-30">Real-time stats</span>
+                 <h3 className={`text-xs font-black uppercase tracking-widest ${isHighContrast ? 'opacity-40' : 'text-gray-600'}`}>Performance Dashboard</h3>
+                 <span className={`text-[10px] font-bold ${isHighContrast ? 'opacity-30' : 'text-gray-400'}`}>Real-time stats</span>
               </div>
 
               {/* Summary Stats */}
@@ -269,24 +269,24 @@ export const ZoneOwnerDashboard: React.FC<ZoneOwnerDashboardProps> = ({
                  <div className={`${cardClass} p-3 rounded-2xl text-center`}>
                     <div className="flex justify-center mb-1 text-indigo-600"><TrendingUp size={16}/></div>
                     <p className="text-lg font-black">{totalViews.toLocaleString()}</p>
-                    <p className="text-[8px] opacity-40 font-black uppercase">Total Views</p>
+                    <p className={`text-[8px] font-black uppercase ${isHighContrast ? 'opacity-40' : 'text-gray-500'}`}>Total Views</p>
                  </div>
                  <div className={`${cardClass} p-3 rounded-2xl text-center`}>
                     <div className="flex justify-center mb-1 text-green-600"><DollarSign size={16}/></div>
                     <p className="text-lg font-black text-green-700">${estTotalRevenue.toFixed(2)}</p>
-                    <p className="text-[8px] opacity-40 font-black uppercase">Ad Revenue</p>
+                    <p className={`text-[8px] font-black uppercase ${isHighContrast ? 'opacity-40' : 'text-gray-500'}`}>Ad Revenue</p>
                  </div>
                  <div className={`${cardClass} p-3 rounded-2xl text-center`}>
                     <div className="flex justify-center mb-1 text-purple-600"><Target size={16}/></div>
                     <p className="text-lg font-black">{ownerRentals.length}</p>
-                    <p className="text-[8px] opacity-40 font-black uppercase">Campaigns</p>
+                    <p className={`text-[8px] font-black uppercase ${isHighContrast ? 'opacity-40' : 'text-gray-500'}`}>Campaigns</p>
                  </div>
               </div>
 
               {/* Views Chart */}
               <div className={`${cardClass} p-5 rounded-3xl h-64 flex flex-col`}>
-                 <h4 className="text-[10px] font-black uppercase opacity-40 mb-4 flex items-center gap-2">
-                    <BarChart3 size={14}/> Campaign Impact (Top 5)
+                 <h4 className={`text-[10px] font-black uppercase mb-4 flex items-center gap-2 ${isHighContrast ? 'opacity-40' : 'text-gray-500'}`}>
+                    <BarChart3 size={14} className="text-gray-600"/> Campaign Impact (Top 5)
                  </h4>
                  <div className="flex-1 w-full">
                     {chartData.length > 0 ? (
@@ -314,7 +314,7 @@ export const ZoneOwnerDashboard: React.FC<ZoneOwnerDashboardProps> = ({
 
               {/* Detailed Ad Performance List */}
               <div className="space-y-4">
-                 <h4 className="text-[10px] font-black uppercase opacity-40 px-1 tracking-widest">Campaign Breakdown</h4>
+                 <h4 className={`text-[10px] font-black uppercase px-1 tracking-widest ${isHighContrast ? 'opacity-40' : 'text-gray-500'}`}>Campaign Breakdown</h4>
                  {ownerRentals.length === 0 ? (
                     <div className="py-12 text-center opacity-20">No campaigns found</div>
                  ) : (
@@ -334,13 +334,13 @@ export const ZoneOwnerDashboard: React.FC<ZoneOwnerDashboardProps> = ({
                                 </div>
                                 <div className="text-right">
                                    <p className="text-sm font-black text-green-700">${revenue.toFixed(2)}</p>
-                                   <p className="text-[8px] font-black opacity-30 uppercase">Revenue (Net)</p>
+                                   <p className={`text-[8px] font-black uppercase ${isHighContrast ? 'opacity-30' : 'text-gray-400'}`}>Revenue (Net)</p>
                                 </div>
                              </div>
 
                              <div className="space-y-2">
                                 <div className="flex justify-between items-end">
-                                   <span className="text-[9px] font-bold opacity-40 uppercase tracking-widest">Views Fulfilled</span>
+                                   <span className={`text-[9px] font-bold uppercase tracking-widest ${isHighContrast ? 'opacity-40' : 'text-gray-500'}`}>Views Fulfilled</span>
                                    <span className="text-[10px] font-black tabular-nums">{r.currentViews.toLocaleString()} / {r.targetViews.toLocaleString()}</span>
                                 </div>
                                 <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
@@ -351,7 +351,7 @@ export const ZoneOwnerDashboard: React.FC<ZoneOwnerDashboardProps> = ({
                                 </div>
                              </div>
 
-                             <div className="pt-2 flex justify-between items-center text-[9px] font-black opacity-40 border-t border-gray-50 pt-3">
+                             <div className={`pt-2 flex justify-between items-center text-[9px] font-black border-t border-gray-50 pt-3 ${isHighContrast ? 'opacity-40' : 'text-gray-500'}`}>
                                 <span className="uppercase">{r.advertiserName}</span>
                                 <span className="uppercase">CPM ${r.pricePer1k.toFixed(2)}</span>
                              </div>
@@ -367,7 +367,7 @@ export const ZoneOwnerDashboard: React.FC<ZoneOwnerDashboardProps> = ({
         {activeTab === 'requests' && (
            <div className="space-y-4 animate-in fade-in">
               <div className="flex justify-between items-center px-1">
-                 <h3 className="text-xs font-black uppercase opacity-40 tracking-widest">Campaign Proposals</h3>
+                 <h3 className={`text-xs font-black uppercase tracking-widest ${isHighContrast ? 'opacity-40' : 'text-gray-600'}`}>Campaign Proposals</h3>
                  <div className="flex gap-2 bg-gray-100 rounded-lg p-1">
                     <button 
                        onClick={() => setRequestFilter('PENDING')}
@@ -387,7 +387,7 @@ export const ZoneOwnerDashboard: React.FC<ZoneOwnerDashboardProps> = ({
               {requestFilter === 'PENDING' ? (
                  pendingRequests.length === 0 ? (
                     <div className="flex flex-col items-center justify-center py-24 opacity-20">
-                       <CheckCircle size={48} className="mb-2" />
+                       <CheckCircle size={48} className="mb-2 text-gray-400" />
                        <p className="text-sm font-bold uppercase tracking-widest">Inbox Zero</p>
                        <p className="text-xs mt-2">No pending campaigns.</p>
                     </div>
@@ -401,12 +401,12 @@ export const ZoneOwnerDashboard: React.FC<ZoneOwnerDashboardProps> = ({
                                 </div>
                                 <div>
                                    <h4 className="font-bold text-sm">{req.adContent.title}</h4>
-                                   <p className="text-[9px] opacity-60 uppercase font-black tracking-tighter">From {req.advertiserName}</p>
+                                   <p className={`text-[9px] uppercase font-black tracking-tighter ${isHighContrast ? 'opacity-60' : 'text-gray-500'}`}>From {req.advertiserName}</p>
                                 </div>
                              </div>
                              <div className="text-right">
                                 <p className="text-base font-black text-green-600">${req.totalPrice.toFixed(2)}</p>
-                                <p className="text-[8px] opacity-40 font-bold uppercase">Proposal</p>
+                                <p className={`text-[8px] font-bold uppercase ${isHighContrast ? 'opacity-40' : 'text-gray-500'}`}>Proposal</p>
                              </div>
                           </div>
                           <div className="flex gap-2">
@@ -421,7 +421,7 @@ export const ZoneOwnerDashboard: React.FC<ZoneOwnerDashboardProps> = ({
                  // HISTORY VIEW
                  historyRequests.length === 0 ? (
                     <div className="flex flex-col items-center justify-center py-24 opacity-20">
-                       <History size={48} className="mb-2" />
+                       <History size={48} className="mb-2 text-gray-400" />
                        <p className="text-sm font-bold uppercase tracking-widest">No History</p>
                        <p className="text-xs mt-2">Decisions will appear here.</p>
                     </div>
@@ -434,7 +434,7 @@ export const ZoneOwnerDashboard: React.FC<ZoneOwnerDashboardProps> = ({
                                 {req.status}
                              </span>
                           </div>
-                          <div className="flex justify-between items-center text-[9px] opacity-50 font-bold uppercase">
+                          <div className={`flex justify-between items-center text-[9px] font-bold uppercase ${isHighContrast ? 'opacity-50' : 'text-gray-500'}`}>
                              <span>{req.advertiserName}</span>
                              <span>${req.totalPrice.toFixed(2)}</span>
                           </div>
@@ -451,7 +451,7 @@ export const ZoneOwnerDashboard: React.FC<ZoneOwnerDashboardProps> = ({
                              <video src={previewAd.adContent.videoUrl} autoPlay loop controls className="w-full h-full object-cover" />
                           ) : (
                              <div className="flex flex-col items-center text-white opacity-50">
-                               <PlayCircle size={48} />
+                               <PlayCircle size={48} className="text-gray-700" />
                                <span className="text-xs mt-2">No Video Preview</span>
                              </div>
                           )}
@@ -462,11 +462,11 @@ export const ZoneOwnerDashboard: React.FC<ZoneOwnerDashboardProps> = ({
                           <p className="text-xs text-gray-500 mb-6 leading-relaxed">{previewAd.adContent.description}</p>
                           <div className="flex justify-between items-center bg-gray-50 p-3 rounded-xl">
                              <div>
-                                <p className="text-[9px] uppercase font-bold opacity-40">Target Views</p>
+                                <p className={`text-[9px] uppercase font-bold ${isHighContrast ? 'opacity-40' : 'text-gray-500'}`}>Target Views</p>
                                 <p className="font-black">{previewAd.targetViews.toLocaleString()}</p>
                              </div>
                              <div>
-                                <p className="text-[9px] uppercase font-bold opacity-40">CPM</p>
+                                <p className={`text-[9px] uppercase font-bold ${isHighContrast ? 'opacity-40' : 'text-gray-500'}`}>CPM</p>
                                 <p className="font-black">${previewAd.pricePer1k.toFixed(2)}</p>
                              </div>
                           </div>
@@ -497,17 +497,17 @@ export const ZoneOwnerDashboard: React.FC<ZoneOwnerDashboardProps> = ({
 
               <div className="grid grid-cols-2 gap-3">
                  <div className={`${cardClass} p-4 rounded-2xl`}>
-                    <p className="text-[9px] font-black opacity-40 uppercase">Pending Escrow</p>
+                    <p className={`text-[9px] font-black uppercase ${isHighContrast ? 'opacity-40' : 'text-gray-500'}`}>Pending Escrow</p>
                     <p className="text-lg font-black text-orange-600">${user.escrowBalance?.toFixed(2) || '0.00'}</p>
                  </div>
                  <div className={`${cardClass} p-4 rounded-2xl`}>
-                    <p className="text-[9px] font-black opacity-40 uppercase">Life Earnings</p>
+                    <p className={`text-[9px] font-black uppercase ${isHighContrast ? 'opacity-40' : 'text-gray-500'}`}>Life Earnings</p>
                     <p className="text-lg font-black text-indigo-700">${user.totalEarnings?.toFixed(2)}</p>
                  </div>
               </div>
 
               <div className={`${cardClass} p-5 rounded-2xl`}>
-                 <h3 className="text-[10px] font-black uppercase opacity-40 mb-4 tracking-widest">Revenue Details</h3>
+                 <h3 className={`text-[10px] font-black uppercase mb-4 tracking-widest ${isHighContrast ? 'opacity-40' : 'text-gray-500'}`}>Revenue Details</h3>
                  <div className="space-y-3">
                     <div className="flex justify-between text-xs">
                        <span className="font-bold">Gross Total</span>

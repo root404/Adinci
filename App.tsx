@@ -105,6 +105,31 @@ export default function App() {
   const [advertiserTargetZone, setAdvertiserTargetZone] = useState<AdZone | null>(null);
   const [isLoadingAuth, setIsLoadingAuth] = useState(false);
 
+  const handleRoleSelect = (role: UserType) => {
+    setSelectedRole(role);
+    // Auto-fill credentials for demo purposes
+    if (authMode === 'login') {
+      let email = '';
+      let password = '0000';
+      
+      switch(role) {
+        case UserType.ZONE_OWNER:
+          email = 'zone@test.com';
+          break;
+        case UserType.ADVERTISER:
+          email = 'ads@test.com';
+          break;
+        case UserType.REGULAR:
+          email = 'usr@test.com';
+          break;
+      }
+      setAuthForm(prev => ({ ...prev, email, password }));
+    } else {
+      // Clear for signup
+      setAuthForm(prev => ({ ...prev, email: '', password: '' }));
+    }
+  };
+
   const handleAuthSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!selectedRole || !authForm.email || !authForm.password) {
@@ -406,7 +431,7 @@ export default function App() {
              <div className="flex justify-between items-start mb-4">
                 <div>
                    <h2 className="text-2xl font-black leading-tight">{viewingAd.adContent.title}</h2>
-                   <p className="text-xs font-bold opacity-50 uppercase tracking-widest mt-1 flex items-center gap-1">
+                   <p className={`text-xs font-bold uppercase tracking-widest mt-1 flex items-center gap-1 ${isHighContrast ? 'opacity-50' : 'text-gray-600'}`}>
                       <ShieldCheck size={12}/> {viewingAd.adContent.companyName}
                    </p>
                 </div>
@@ -415,7 +440,7 @@ export default function App() {
                 </div>
              </div>
              
-             <p className="text-sm font-medium opacity-70 mb-8 leading-relaxed">
+             <p className={`text-sm font-medium mb-8 leading-relaxed ${isHighContrast ? 'opacity-70' : 'text-gray-700'}`}>
                 {viewingAd.adContent.description}
              </p>
 
@@ -451,34 +476,34 @@ export default function App() {
                       <div className="text-center">
                         <Logo size="w-24 h-24 sm:w-32 sm:h-32" /> 
                         <h1 className="text-4xl sm:text-5xl font-black mb-2 tracking-tighter">Adinci</h1>
-                        <p className="text-xs sm:text-sm opacity-60 font-bold uppercase tracking-widest">Digital Space Monetization</p>
+                        <p className={`text-xs sm:text-sm font-bold uppercase tracking-widest ${isHighContrast ? 'opacity-80 text-yellow-400' : 'opacity-80 text-gray-200'}`}>Digital Space Monetization</p>
                       </div>
                       
                       <div className={`p-6 sm:p-8 rounded-[32px] sm:rounded-[40px] space-y-3 sm:space-y-4 ${isHighContrast ? 'bg-gray-900 border-2 border-yellow-400' : 'bg-white/10 backdrop-blur-xl border border-white/20 shadow-2xl'}`}>
-                         <p className="text-center text-xs font-black uppercase tracking-widest opacity-80 mb-4">Choose Your Path</p>
+                         <p className={`text-center text-xs font-black uppercase tracking-widest mb-4 ${isHighContrast ? 'opacity-80 text-yellow-400' : 'text-gray-100'}`}>Choose Your Path</p>
                          
                          <div className="grid grid-cols-1 gap-3">
-                            <button onClick={() => setSelectedRole(UserType.ZONE_OWNER)} className="flex items-center gap-4 p-4 sm:p-5 rounded-3xl bg-white/5 hover:bg-white/10 transition-all border border-white/5 group active:scale-95">
+                            <button onClick={() => handleRoleSelect(UserType.ZONE_OWNER)} className="flex items-center gap-4 p-4 sm:p-5 rounded-3xl bg-white/5 hover:bg-white/10 transition-all border border-white/5 group active:scale-95">
                                <div className="p-3 rounded-2xl bg-orange-500 shadow-lg shadow-orange-500/20"><Building size={24}/></div>
                                <div className="text-left">
                                   <p className="font-black text-base">Zone Owner</p>
-                                  <p className="text-[10px] font-bold opacity-60 uppercase tracking-tighter">Monetize Physical Assets</p>
+                                  <p className="text-[10px] font-bold text-gray-200 uppercase tracking-tighter">Monetize Physical Assets</p>
                                </div>
                             </button>
                             
-                            <button onClick={() => setSelectedRole(UserType.ADVERTISER)} className="flex items-center gap-4 p-4 sm:p-5 rounded-3xl bg-white/5 hover:bg-white/10 transition-all border border-white/5 group active:scale-95">
+                            <button onClick={() => handleRoleSelect(UserType.ADVERTISER)} className="flex items-center gap-4 p-4 sm:p-5 rounded-3xl bg-white/5 hover:bg-white/10 transition-all border border-white/5 group active:scale-95">
                                <div className="p-3 rounded-2xl bg-indigo-500 shadow-lg shadow-indigo-500/20"><ShieldCheck size={24}/></div>
                                <div className="text-left">
                                   <p className="font-black text-base">Advertiser</p>
-                                  <p className="text-[10px] font-bold opacity-60 uppercase tracking-tighter">Reach Local Audiences</p>
+                                  <p className="text-[10px] font-bold text-gray-200 uppercase tracking-tighter">Reach Local Audiences</p>
                                </div>
                             </button>
                             
-                            <button onClick={() => setSelectedRole(UserType.REGULAR)} className="flex items-center gap-4 p-4 sm:p-5 rounded-3xl bg-white/5 hover:bg-white/10 transition-all border border-white/5 group active:scale-95">
+                            <button onClick={() => handleRoleSelect(UserType.REGULAR)} className="flex items-center gap-4 p-4 sm:p-5 rounded-3xl bg-white/5 hover:bg-white/10 transition-all border border-white/5 group active:scale-95">
                                <div className="p-3 rounded-2xl bg-blue-500 shadow-lg shadow-blue-500/20"><UserIcon size={24}/></div>
                                <div className="text-left">
                                   <p className="font-black text-base">Regular User</p>
-                                  <p className="text-[10px] font-bold opacity-60 uppercase tracking-tighter">Earn Rewards Daily</p>
+                                  <p className="text-[10px] font-bold text-gray-200 uppercase tracking-tighter">Earn Rewards Daily</p>
                                </div>
                             </button>
                          </div>
@@ -486,13 +511,13 @@ export default function App() {
                    </div>
                  ) : (
                    <div className="w-full max-w-sm animate-in slide-in-from-right-12 duration-500">
-                      <button onClick={() => { setSelectedRole(null); setAuthMode('login'); }} className="mb-6 flex items-center gap-2 text-sm font-black uppercase tracking-widest opacity-60 hover:opacity-100 transition-opacity">
+                      <button onClick={() => { setSelectedRole(null); setAuthMode('login'); }} className="mb-6 flex items-center gap-2 text-sm font-black uppercase tracking-widest text-white/80 hover:text-white transition-opacity">
                          <ArrowLeft size={18}/> Back to roles
                       </button>
 
                       <div className="mb-8 text-center">
-                         <h2 className="text-3xl font-black mb-2">{authMode === 'login' ? 'Welcome Back' : 'Create Account'}</h2>
-                         <p className="text-xs font-black opacity-60 uppercase tracking-widest">
+                         <h2 className="text-3xl font-black mb-2 text-white">{authMode === 'login' ? 'Welcome Back' : 'Create Account'}</h2>
+                         <p className="text-xs font-black text-white/70 uppercase tracking-widest">
                             {authMode === 'login' ? 'Continue as' : 'Register as'} {selectedRole.replace('_', ' ')}
                          </p>
                       </div>
@@ -502,29 +527,29 @@ export default function App() {
                          {authMode === 'signup' && (
                             <>
                                <div className="space-y-1">
-                                  <label className="text-[10px] font-black opacity-40 uppercase tracking-widest ml-1">Full Name</label>
+                                  <label className={`text-[10px] font-black uppercase tracking-widest ml-1 ${isHighContrast ? 'text-yellow-400' : 'text-gray-600'}`}>Full Name</label>
                                   <div className="relative">
-                                     <UserIcon className="absolute left-4 top-1/2 -translate-y-1/2 opacity-30" size={16}/>
+                                     <UserIcon className={`absolute left-4 top-1/2 -translate-y-1/2 ${isHighContrast ? 'text-yellow-400 opacity-60' : 'text-gray-500'}`} size={16}/>
                                      <input 
                                         type="text" 
                                         placeholder="John Doe" 
                                         value={authForm.name}
                                         onChange={e => setAuthForm({...authForm, name: e.target.value})}
-                                        className="w-full pl-11 pr-4 py-3.5 rounded-2xl bg-gray-50 border border-gray-100 outline-none focus:border-indigo-600 focus:bg-white transition-all font-bold text-sm"
+                                        className={`w-full pl-11 pr-4 py-3.5 rounded-2xl border outline-none transition-all font-bold text-sm ${isHighContrast ? 'bg-black border-yellow-400 text-white focus:border-white' : 'bg-gray-50 border-gray-100 focus:border-indigo-600 focus:bg-white'}`}
                                      />
                                   </div>
                                </div>
 
                                <div className="space-y-1">
-                                  <label className="text-[10px] font-black opacity-40 uppercase tracking-widest ml-1">Phone Number</label>
+                                  <label className={`text-[10px] font-black uppercase tracking-widest ml-1 ${isHighContrast ? 'text-yellow-400' : 'text-gray-600'}`}>Phone Number</label>
                                   <div className="relative">
-                                     <Phone className="absolute left-4 top-1/2 -translate-y-1/2 opacity-30" size={16}/>
+                                     <Phone className={`absolute left-4 top-1/2 -translate-y-1/2 ${isHighContrast ? 'text-yellow-400 opacity-60' : 'text-gray-500'}`} size={16}/>
                                      <input 
                                         type="tel" 
                                         placeholder="+971 -- --- ----" 
                                         value={authForm.phoneNumber}
                                         onChange={e => setAuthForm({...authForm, phoneNumber: e.target.value})}
-                                        className="w-full pl-11 pr-4 py-3.5 rounded-2xl bg-gray-50 border border-gray-100 outline-none focus:border-indigo-600 focus:bg-white transition-all font-bold text-sm"
+                                        className={`w-full pl-11 pr-4 py-3.5 rounded-2xl border outline-none transition-all font-bold text-sm ${isHighContrast ? 'bg-black border-yellow-400 text-white focus:border-white' : 'bg-gray-50 border-gray-100 focus:border-indigo-600 focus:bg-white'}`}
                                      />
                                   </div>
                                </div>
@@ -532,31 +557,31 @@ export default function App() {
                          )}
 
                          <div className="space-y-1">
-                            <label className="text-[10px] font-black opacity-40 uppercase tracking-widest ml-1">Email Address</label>
+                            <label className={`text-[10px] font-black uppercase tracking-widest ml-1 ${isHighContrast ? 'text-yellow-400' : 'text-gray-600'}`}>Email Address</label>
                             <div className="relative">
-                               <AtSign className="absolute left-4 top-1/2 -translate-y-1/2 opacity-30" size={16}/>
+                               <AtSign className={`absolute left-4 top-1/2 -translate-y-1/2 ${isHighContrast ? 'text-yellow-400 opacity-60' : 'text-gray-500'}`} size={16}/>
                                <input 
                                   type="email" 
                                   placeholder="name@company.com" 
                                   value={authForm.email}
                                   onChange={e => setAuthForm({...authForm, email: e.target.value})}
-                                  className="w-full pl-11 pr-4 py-3.5 rounded-2xl bg-gray-50 border border-gray-100 outline-none focus:border-indigo-600 focus:bg-white transition-all font-bold text-sm"
+                                  className={`w-full pl-11 pr-4 py-3.5 rounded-2xl border outline-none transition-all font-bold text-sm ${isHighContrast ? 'bg-black border-yellow-400 text-white focus:border-white' : 'bg-gray-50 border-gray-100 focus:border-indigo-600 focus:bg-white'}`}
                                />
                             </div>
                          </div>
 
                          <div className="space-y-1">
-                            <label className="text-[10px] font-black opacity-40 uppercase tracking-widest ml-1">Password</label>
+                            <label className={`text-[10px] font-black uppercase tracking-widest ml-1 ${isHighContrast ? 'text-yellow-400' : 'text-gray-600'}`}>Password</label>
                             <div className="relative">
-                               <Lock className="absolute left-4 top-1/2 -translate-y-1/2 opacity-30" size={16}/>
+                               <Lock className={`absolute left-4 top-1/2 -translate-y-1/2 ${isHighContrast ? 'text-yellow-400 opacity-60' : 'text-gray-500'}`} size={16}/>
                                <input 
                                   type={showPassword ? "text" : "password"} 
                                   placeholder="••••••••" 
                                   value={authForm.password}
                                   onChange={e => setAuthForm({...authForm, password: e.target.value})}
-                                  className="w-full pl-11 pr-11 py-3.5 rounded-2xl bg-gray-50 border border-gray-100 outline-none focus:border-indigo-600 focus:bg-white transition-all font-bold text-sm"
+                                  className={`w-full pl-11 pr-11 py-3.5 rounded-2xl border outline-none transition-all font-bold text-sm ${isHighContrast ? 'bg-black border-yellow-400 text-white focus:border-white' : 'bg-gray-50 border-gray-100 focus:border-indigo-600 focus:bg-white'}`}
                                />
-                               <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-4 top-1/2 -translate-y-1/2 opacity-30 hover:opacity-100 transition-opacity">
+                               <button type="button" onClick={() => setShowPassword(!showPassword)} className={`absolute right-4 top-1/2 -translate-y-1/2 transition-colors ${isHighContrast ? 'text-yellow-400 hover:text-white' : 'text-gray-500 hover:text-gray-800'}`}>
                                   {showPassword ? <EyeOff size={16}/> : <Eye size={16}/>}
                                </button>
                             </div>
@@ -565,15 +590,15 @@ export default function App() {
                          {authMode === 'signup' && (
                             <>
                               <div className="space-y-1">
-                                 <label className="text-[10px] font-black opacity-40 uppercase tracking-widest ml-1">Confirm Password</label>
+                                 <label className={`text-[10px] font-black uppercase tracking-widest ml-1 ${isHighContrast ? 'text-yellow-400' : 'text-gray-600'}`}>Confirm Password</label>
                                  <div className="relative">
-                                    <Shield className="absolute left-4 top-1/2 -translate-y-1/2 opacity-30" size={16}/>
+                                    <Shield className={`absolute left-4 top-1/2 -translate-y-1/2 ${isHighContrast ? 'text-yellow-400 opacity-60' : 'text-gray-500'}`} size={16}/>
                                     <input 
                                        type={showPassword ? "text" : "password"} 
                                        placeholder="••••••••" 
                                        value={authForm.confirmPassword}
                                        onChange={e => setAuthForm({...authForm, confirmPassword: e.target.value})}
-                                       className="w-full pl-11 pr-4 py-3.5 rounded-2xl bg-gray-50 border border-gray-100 outline-none focus:border-indigo-600 focus:bg-white transition-all font-bold text-sm"
+                                       className={`w-full pl-11 pr-4 py-3.5 rounded-2xl border outline-none transition-all font-bold text-sm ${isHighContrast ? 'bg-black border-yellow-400 text-white focus:border-white' : 'bg-gray-50 border-gray-100 focus:border-indigo-600 focus:bg-white'}`}
                                     />
                                  </div>
                               </div>
@@ -593,7 +618,7 @@ export default function App() {
                                             className="w-5 h-5 accent-indigo-600 cursor-pointer"
                                         />
                                     </div>
-                                    <label htmlFor="visualCheck" className={`text-xs font-black uppercase tracking-wide cursor-pointer flex items-center gap-2 select-none ${isHighContrast ? 'text-yellow-400' : 'text-gray-600'}`}>
+                                    <label htmlFor="visualCheck" className={`text-xs font-black uppercase tracking-wide cursor-pointer flex items-center gap-2 select-none ${isHighContrast ? 'text-yellow-400' : 'text-gray-700'}`}>
                                         <Eye size={16} /> I am visually impaired / blind
                                     </label>
                                 </div>
@@ -604,7 +629,7 @@ export default function App() {
                          <button 
                             type="submit" 
                             disabled={isLoadingAuth}
-                            className="w-full py-4.5 bg-indigo-600 text-white rounded-[24px] font-black shadow-xl shadow-indigo-100 flex items-center justify-center gap-3 active:scale-95 transition-all disabled:opacity-50 disabled:active:scale-100 mt-2"
+                            className={`w-full py-4.5 rounded-[24px] font-black shadow-xl flex items-center justify-center gap-3 active:scale-95 transition-all disabled:opacity-50 disabled:active:scale-100 mt-2 ${isHighContrast ? 'bg-yellow-400 text-black shadow-none' : 'bg-indigo-600 text-white shadow-indigo-100'}`}
                          >
                             {isLoadingAuth ? <Loader2 className="animate-spin" size={20}/> : (authMode === 'login' ? 'Sign In' : 'Register Now')}
                          </button>
@@ -612,8 +637,8 @@ export default function App() {
 
                       <div className="mt-8 text-center pb-10">
                          <button 
-                            onClick={() => { setAuthMode(authMode === 'login' ? 'signup' : 'login'); setShowPassword(false); }}
-                            className="text-xs font-black uppercase tracking-[0.2em] opacity-60 hover:opacity-100 transition-opacity"
+                            onClick={() => { setAuthMode(authMode === 'login' ? 'signup' : 'login'); setShowPassword(false); setAuthForm(prev => ({...prev, email: '', password: ''})); }}
+                            className="text-xs font-black uppercase tracking-[0.2em] text-white/70 hover:text-white transition-opacity"
                          >
                             {authMode === 'login' ? "Don't have an account? Sign Up" : "Already have an account? Log In"}
                          </button>
@@ -707,7 +732,7 @@ export default function App() {
                   <div className={`p-6 pb-4 ${isHighContrast ? 'bg-gray-900 border-b border-yellow-400' : 'bg-indigo-700 text-white shadow-xl'}`}>
                      <div className="flex justify-between items-center mb-4">
                         <h2 className="text-xl font-black uppercase tracking-tight">Rewards Hub</h2>
-                        <Gift size={24} className="opacity-50" />
+                        <Gift size={24} className="text-gray-300 opacity-80" />
                      </div>
                      
                      <div className="flex bg-black/20 p-1 rounded-xl">
@@ -729,16 +754,16 @@ export default function App() {
                   <div className="flex-1 overflow-y-auto p-4 pb-20">
                      {rewardTab === 'inbox' ? (
                         <div className="space-y-4 animate-in fade-in slide-in-from-left-4">
-                           <h3 className="text-xs font-black uppercase opacity-40 tracking-widest px-1">Watch & Earn Queue</h3>
+                           <h3 className={`text-xs font-black uppercase tracking-widest px-1 ${isHighContrast ? 'opacity-40' : 'text-gray-500'}`}>Watch & Earn Queue</h3>
                            
                            {user.inventory.filter(ad => !ad.redeemed).length === 0 ? (
                               <div className="py-20 text-center space-y-4">
                                  <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto">
-                                    <Play size={40} className="text-gray-300" />
+                                    <Play size={40} className="text-gray-400" />
                                  </div>
                                  <div className="space-y-1">
                                     <p className="text-sm font-black text-gray-900 uppercase tracking-widest">Inbox Empty</p>
-                                    <p className="text-[11px] opacity-40 max-w-[220px] mx-auto font-bold leading-relaxed">
+                                    <p className={`text-[11px] max-w-[220px] mx-auto font-bold leading-relaxed ${isHighContrast ? 'opacity-40' : 'text-gray-500'}`}>
                                        Move around the map to collect location-based ads!
                                     </p>
                                  </div>
@@ -763,8 +788,8 @@ export default function App() {
                                        <div className="max-w-[180px]">
                                           <h4 className="font-black text-sm truncate">{ad.adContent.title}</h4>
                                           <div className="flex items-center gap-2 mt-0.5">
-                                             <Clock size={10} className="opacity-40" />
-                                             <p className="text-[10px] opacity-40 font-black uppercase tracking-tighter">
+                                             <Clock size={10} className={`${isHighContrast ? 'opacity-40' : 'text-gray-600'}`} />
+                                             <p className={`text-[10px] font-black uppercase tracking-tighter ${isHighContrast ? 'opacity-40' : 'text-gray-500'}`}>
                                                 {new Date(ad.collectedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                                              </p>
                                           </div>
@@ -773,9 +798,9 @@ export default function App() {
                                     <div className="text-right">
                                        <div className="flex items-center gap-1 text-green-600 font-black text-sm">
                                           <span>+{ad.adContent.rewardPoints}</span>
-                                          <ChevronRight size={14} className="opacity-40" />
+                                          <ChevronRight size={14} className={`${isHighContrast ? 'opacity-40' : 'text-gray-600'}`} />
                                        </div>
-                                       <p className="text-[8px] opacity-30 font-black uppercase">Points</p>
+                                       <p className={`text-[8px] font-black uppercase ${isHighContrast ? 'opacity-30' : 'text-gray-400'}`}>Points</p>
                                     </div>
                                  </div>
                               ))
@@ -786,8 +811,8 @@ export default function App() {
                            {/* Wallet Balance Card */}
                            <div className={`p-6 rounded-[32px] relative overflow-hidden ${isHighContrast ? 'bg-gray-900 border-2 border-yellow-400' : 'bg-gradient-to-br from-indigo-900 to-purple-900 text-white shadow-xl'}`}>
                               <div className="relative z-10">
-                                 <div className="flex items-center gap-2 opacity-60 mb-2">
-                                    <Wallet size={16} />
+                                 <div className="flex items-center gap-2 opacity-90 mb-2">
+                                    <Wallet size={16} className="text-white" />
                                     <p className="text-[10px] font-black uppercase tracking-widest">Total Balance</p>
                                  </div>
                                  <h2 className="text-4xl font-black mb-1">{user.points.toLocaleString()} <span className="text-lg opacity-50">PTS</span></h2>
@@ -800,29 +825,29 @@ export default function App() {
 
                            {/* Swap/Convert Section */}
                            <div className={`p-5 rounded-3xl space-y-4 ${isHighContrast ? 'bg-gray-900 border border-yellow-400' : 'bg-white shadow-sm border border-gray-100'}`}>
-                              <h3 className="text-xs font-black uppercase opacity-40 tracking-widest flex items-center gap-2">
-                                 <ArrowRightLeft size={14} /> Conversion Rate
+                              <h3 className={`text-xs font-black uppercase tracking-widest flex items-center gap-2 ${isHighContrast ? 'opacity-40' : 'text-gray-600'}`}>
+                                 <ArrowRightLeft size={14} className="text-gray-500" /> Conversion Rate
                               </h3>
                               <div className="flex justify-between items-center bg-gray-50 p-3 rounded-2xl">
-                                 <span className="text-xs font-black text-gray-500">100 Points</span>
-                                 <ArrowRightLeft size={14} className="text-gray-400" />
+                                 <span className="text-xs font-black text-gray-700">100 Points</span>
+                                 <ArrowRightLeft size={14} className="text-gray-500" />
                                  <span className="text-xs font-black text-indigo-600">1.00 ADT</span>
                               </div>
-                              <p className="text-[10px] opacity-40 leading-relaxed">
+                              <p className={`text-[10px] leading-relaxed ${isHighContrast ? 'opacity-40' : 'text-gray-500'}`}>
                                  Points are automatically converted to Adinci Tokens (ADT) upon withdrawal. Minimum withdrawal is 500 Points.
                               </p>
                            </div>
 
                            {/* Withdraw Section */}
                            <div className={`p-5 rounded-3xl space-y-4 ${isHighContrast ? 'bg-gray-900 border border-yellow-400' : 'bg-white shadow-sm border border-gray-100'}`}>
-                              <h3 className="text-xs font-black uppercase opacity-40 tracking-widest flex items-center gap-2">
-                                 <Zap size={14} /> Withdraw to Crypto
+                              <h3 className={`text-xs font-black uppercase tracking-widest flex items-center gap-2 ${isHighContrast ? 'opacity-40' : 'text-gray-600'}`}>
+                                 <Zap size={14} className="text-gray-500" /> Withdraw to Crypto
                               </h3>
                               
                               <div className="space-y-2">
-                                 <label className="text-[10px] font-bold uppercase opacity-60 ml-1">Wallet Address (Polygon / ETH)</label>
+                                 <label className={`text-[10px] font-bold uppercase ml-1 ${isHighContrast ? 'opacity-60' : 'text-gray-700'}`}>Wallet Address (Polygon / ETH)</label>
                                  <div className="flex items-center bg-gray-50 rounded-2xl border border-gray-200 focus-within:border-indigo-500 focus-within:ring-2 ring-indigo-100 transition-all">
-                                    <Wallet size={16} className="ml-3 text-gray-400" />
+                                    <Wallet size={16} className="ml-3 text-gray-600" />
                                     <input 
                                        value={withdrawAddress}
                                        onChange={(e) => setWithdrawAddress(e.target.value)}
@@ -854,9 +879,9 @@ export default function App() {
                            </div>
 
                            {/* Mock History */}
-                           <div className="pt-2 opacity-50">
-                              <h3 className="text-[10px] font-black uppercase opacity-60 tracking-widest mb-3 flex items-center gap-2">
-                                 <History size={12} /> Recent Transactions
+                           <div className="pt-2">
+                              <h3 className={`text-[10px] font-black uppercase tracking-widest mb-3 flex items-center gap-2 ${isHighContrast ? 'opacity-60' : 'text-gray-700'}`}>
+                                 <History size={12} className="text-gray-600" /> Recent Transactions
                               </h3>
                               <div className="space-y-2">
                                  <div className="flex justify-between items-center p-3 rounded-xl bg-gray-50/50 border border-gray-100">
@@ -866,10 +891,10 @@ export default function App() {
                                        </div>
                                        <div>
                                           <p className="text-[10px] font-black uppercase">Withdrawal</p>
-                                          <p className="text-[9px] opacity-60">2 days ago</p>
+                                          <p className={`text-[9px] ${isHighContrast ? 'opacity-60' : 'text-gray-500'}`}>2 days ago</p>
                                        </div>
                                     </div>
-                                    <span className="text-xs font-black text-gray-400">- 15.00 ADT</span>
+                                    <span className="text-xs font-black text-gray-600">- 15.00 ADT</span>
                                  </div>
                               </div>
                            </div>
