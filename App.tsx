@@ -493,7 +493,7 @@ export default function App() {
                       <div className="text-center">
                         <Logo size="w-24 h-24 sm:w-32 sm:h-32" /> 
                         <h1 className="text-4xl sm:text-5xl font-black mb-2 tracking-tighter">Adinci</h1>
-                        <p className={`text-xs sm:text-sm font-bold uppercase tracking-widest ${isHighContrast ? 'opacity-80 text-yellow-400' : 'opacity-80 text-gray-200'}`}>Digital Space Monetization</p>
+                        <p className={`text-xs sm:text-sm font-bold uppercase tracking-widest ${isHighContrast ? 'opacity-80 text-yellow-400' : 'opacity-80 text-gray-200'}`}>Think Invisible. Ad Different</p>
                       </div>
                       
                       <div className={`p-6 sm:p-8 rounded-[32px] sm:rounded-[40px] space-y-3 sm:space-y-4 ${isHighContrast ? 'bg-gray-900 border-2 border-yellow-400' : 'bg-white/10 backdrop-blur-xl border border-white/20 shadow-2xl'}`}>
