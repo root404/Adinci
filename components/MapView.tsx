@@ -6,7 +6,7 @@ import { DUBAI_CENTER, ZONE_PRICE_PER_SQM_MONTH, MIN_ZONE_AREA } from '../consta
 import { 
   Plus, Square, Circle as CircleIcon, X, Check, Edit2, Trash2, Save, 
   Maximize, CreditCard, DollarSign, Clock, AlertTriangle, ArrowRight, 
-  ShieldCheck, ShoppingBag, Info, TrendingUp, History, Move, Layers, Calculator, GripHorizontal
+  ShieldCheck, ShoppingBag, Info, TrendingUp, History, Move, Layers, Calculator, GripHorizontal, RotateCw, Sliders
 } from 'lucide-react';
 
 delete (L.Icon.Default.prototype as any)._getIconUrl;
@@ -92,6 +92,7 @@ export const MapView: React.FC<MapViewProps> = ({
   const [editingZone, setEditingZone] = useState<AdZone | null>(null);
   const [isEditingName, setIsEditingName] = useState(false);
   const [tempName, setTempName] = useState('');
+  const [isGeometryMode, setIsGeometryMode] = useState(false);
 
   useEffect(() => {
     if (selectedZoneId) {
@@ -103,6 +104,7 @@ export const MapView: React.FC<MapViewProps> = ({
     } else {
        setEditingZone(null);
        setIsEditingName(false);
+       setIsGeometryMode(false); // Reset mode when deselecting
     }
   }, [selectedZoneId, zones]);
 
@@ -112,8 +114,18 @@ export const MapView: React.FC<MapViewProps> = ({
     } else if (userType === UserType.ZONE_OWNER && drawingShape && onAddZone) {
       onAddZone({ lat: e.latlng.lat, lng: e.latlng.lng }, drawingShape);
       setDrawingShape(null);
+      // Optional: Enter geometry mode automatically for new zones
+      // setIsGeometryMode(true); 
     } else {
       setSelectedZoneId(null);
+    }
+  };
+
+  const handleRotate = () => {
+    if (editingZone && editingZone.shape === 'RECTANGLE') {
+      const updated = { ...editingZone, width: editingZone.height, height: editingZone.width };
+      setEditingZone(updated);
+      onUpdateZone?.(updated);
     }
   };
 
@@ -127,8 +139,8 @@ export const MapView: React.FC<MapViewProps> = ({
   const currentArea = calculateArea(editingZone);
 
   const getPriceForDuration = (months: number) => {
-     // Rule: Price = Area(m²) × 0.0025 USD × Months
-     const rawPrice = currentArea * 0.0025 * months;
+     // Rule: Price = Area(m²) * RATE * Months
+     const rawPrice = currentArea * ZONE_PRICE_PER_SQM_MONTH * months;
      return rawPrice.toFixed(2);
   };
 
@@ -140,14 +152,39 @@ export const MapView: React.FC<MapViewProps> = ({
      }
   };
 
-  // Helper to calculate handles position
+  const handleResizeByArea = (newArea: number) => {
+      if (!editingZone) return;
+      // Enforce minimum area
+      const safeArea = Math.max(newArea, MIN_ZONE_AREA);
+      
+      let updatedZone = { ...editingZone };
+      
+      if (editingZone.shape === 'CIRCLE') {
+          const newRadius = Math.sqrt(safeArea / Math.PI);
+          updatedZone.radius = newRadius;
+      } else {
+          // Rectangle: Maintain aspect ratio
+          const currentW = editingZone.width || 50;
+          const currentH = editingZone.height || 50;
+          const ratio = (currentW && currentH) ? (currentW / currentH) : 1;
+          
+          // Area = w * h = (h * ratio) * h = ratio * h^2 => h = sqrt(Area / ratio)
+          const newHeight = Math.sqrt(safeArea / ratio);
+          const newWidth = newHeight * ratio;
+          
+          updatedZone.width = newWidth;
+          updatedZone.height = newHeight;
+      }
+      
+      setEditingZone(updatedZone);
+      onUpdateZone?.(updatedZone);
+  };
+
   const getResizeHandlePosition = (zone: AdZone): [number, number] => {
     if (zone.shape === 'CIRCLE') {
-      // Place handle on the right edge
       const lngOffset = (zone.radius) / (111111 * Math.cos(zone.center.lat * Math.PI / 180));
       return [zone.center.lat, zone.center.lng + lngOffset];
     } else {
-      // Place handle on top-right corner
       const latOffset = (zone.height / 2) / 111111;
       const lngOffset = (zone.width / 2) / (111111 * Math.cos(zone.center.lat * Math.PI / 180));
       return [zone.center.lat + latOffset, zone.center.lng + lngOffset];
@@ -170,7 +207,6 @@ export const MapView: React.FC<MapViewProps> = ({
           
           return (
             <React.Fragment key={zone.id}>
-              {/* SHAPE RENDER */}
               {liveZone.shape === 'CIRCLE' ? (
                 <Circle 
                   center={[liveZone.center.lat, liveZone.center.lng]} 
@@ -198,10 +234,8 @@ export const MapView: React.FC<MapViewProps> = ({
                 />
               )}
 
-              {/* EDIT HANDLES - Only for Zone Owner & Selected */}
-              {isSelected && userType === UserType.ZONE_OWNER && (
+              {isSelected && userType === UserType.ZONE_OWNER && isGeometryMode && (
                 <>
-                  {/* Center Move Handle */}
                   <Marker 
                     position={[liveZone.center.lat, liveZone.center.lng]}
                     icon={moveIcon}
@@ -214,7 +248,6 @@ export const MapView: React.FC<MapViewProps> = ({
                     }}
                   />
 
-                  {/* Resize Handle */}
                   <Marker 
                     position={getResizeHandlePosition(liveZone)}
                     icon={resizeIcon}
@@ -226,16 +259,11 @@ export const MapView: React.FC<MapViewProps> = ({
                         const center = liveZone.center;
 
                         if (liveZone.shape === 'CIRCLE') {
-                           // Calculate new radius in meters
                            const newRadius = e.target.getLatLng().distanceTo([center.lat, center.lng]);
                            handleUpdateField('radius', Math.round(newRadius));
                         } else {
-                           // Calculate new Width/Height in meters
-                           // Latitude difference for Height
                            const latDiff = Math.abs(handleLat - center.lat);
-                           const newHeight = latDiff * 111111 * 2; // * 2 because handle is from center to edge
-
-                           // Longitude difference for Width (adjusting for latitude)
+                           const newHeight = latDiff * 111111 * 2;
                            const lngDiff = Math.abs(handleLng - center.lng);
                            const newWidth = lngDiff * 111111 * Math.cos(center.lat * Math.PI / 180) * 2;
 
@@ -270,10 +298,34 @@ export const MapView: React.FC<MapViewProps> = ({
            >
               <Square size={24} />
            </button>
+
+           <div className="h-px bg-gray-300 dark:bg-gray-700 mx-2 my-1"></div>
+
+           <button 
+             onClick={() => {
+                if (!selectedZoneId) return;
+                setIsGeometryMode(!isGeometryMode);
+             }} 
+             disabled={!selectedZoneId}
+             className={`p-4 rounded-2xl shadow-xl transition-all active:scale-95 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed ${isGeometryMode ? 'bg-indigo-600 text-white ring-2 ring-indigo-300' : 'bg-white text-gray-700'}`}
+             title="Move & Resize Mode"
+           >
+              <Move size={24} />
+           </button>
+
+           {isGeometryMode && editingZone?.shape === 'RECTANGLE' && (
+             <button 
+               onClick={handleRotate}
+               className="p-4 rounded-2xl shadow-xl transition-all active:scale-95 flex items-center justify-center bg-white text-gray-700 animate-in zoom-in"
+               title="Rotate 90°"
+             >
+                <RotateCw size={24} />
+             </button>
+           )}
         </div>
       )}
 
-      {editingZone && (
+      {editingZone && !isGeometryMode && (
         <div className={`absolute bottom-20 left-4 right-4 z-[400] rounded-[36px] p-6 animate-in slide-in-from-bottom-10 max-h-[85%] overflow-y-auto ${panelClass}`}>
            <div className="flex justify-between items-center mb-6">
               {isEditingName ? (
@@ -312,66 +364,31 @@ export const MapView: React.FC<MapViewProps> = ({
                        </div>
                     </div>
 
-                    {editingZone.shape === 'CIRCLE' ? (
-                       <div className="space-y-3">
-                          <div className="flex justify-between text-[11px] font-bold text-gray-600 uppercase tracking-tighter">
-                             <span>Radius (m)</span>
-                             <div className="flex items-center gap-2">
-                                <span className="text-indigo-600 font-black">{editingZone.radius}m</span>
-                                <span className={`font-black text-[9px] px-2 py-0.5 rounded-full transition-colors ${currentArea < MIN_ZONE_AREA ? 'bg-red-100 text-red-600' : 'bg-gray-100 dark:bg-gray-700 text-gray-500'}`}>
-                                  {currentArea} m²
-                                </span>
-                             </div>
-                          </div>
-                          <input 
-                            type="range" min="4" max="500" value={editingZone.radius} 
-                            onChange={(e) => handleUpdateField('radius', parseInt(e.target.value))} 
-                            className="w-full h-2 bg-indigo-100 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer accent-indigo-600"
-                          />
-                       </div>
-                    ) : (
-                       <div className="space-y-5">
-                          <div className="space-y-3">
-                             <div className="flex justify-between text-[11px] font-bold text-gray-600 uppercase tracking-tighter">
-                                <span>Width (m)</span>
-                                <div className="flex items-center gap-2">
-                                   <span className="text-indigo-600 font-black">{editingZone.width}m</span>
-                                   <span className={`font-black text-[9px] px-2 py-0.5 rounded-full transition-colors ${currentArea < MIN_ZONE_AREA ? 'bg-red-100 text-red-600' : 'bg-gray-100 dark:bg-gray-700 text-gray-500'}`}>
-                                      {currentArea} m²
-                                   </span>
-                                </div>
-                             </div>
-                             <input 
-                               type="range" min="7" max="1000" value={editingZone.width} 
-                               onChange={(e) => handleUpdateField('width', parseInt(e.target.value))} 
-                               className="w-full h-2 bg-indigo-100 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer accent-indigo-600"
-                             />
-                          </div>
-                          <div className="space-y-3">
-                             <div className="flex justify-between text-[11px] font-bold text-gray-600 uppercase tracking-tighter">
-                                <span>Height (m)</span>
-                                <div className="flex items-center gap-2">
-                                   <span className="text-indigo-600 font-black">{editingZone.height}m</span>
-                                   <span className={`font-black text-[9px] px-2 py-0.5 rounded-full transition-colors ${currentArea < MIN_ZONE_AREA ? 'bg-red-100 text-red-600' : 'bg-gray-100 dark:bg-gray-700 text-gray-500'}`}>
-                                      {currentArea} m²
-                                   </span>
-                                </div>
-                             </div>
-                             <input 
-                               type="range" min="8" max="1000" value={editingZone.height} 
-                               onChange={(e) => handleUpdateField('height', parseInt(e.target.value))} 
-                               className="w-full h-2 bg-indigo-100 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer accent-indigo-600"
-                             />
-                          </div>
-                       </div>
-                    )}
+                    <div className="space-y-3 pt-1 border-t border-gray-200 dark:border-gray-700">
+                        <div className="flex justify-between text-[10px] font-bold uppercase text-gray-500">
+                            <span className="flex items-center gap-1"><Sliders size={12}/> Budget & Coverage</span>
+                            <span>${(currentArea * ZONE_PRICE_PER_SQM_MONTH).toFixed(2)}/mo</span>
+                        </div>
+                        <input 
+                            type="range" 
+                            min={MIN_ZONE_AREA} 
+                            max={100000} 
+                            step={50}
+                            value={currentArea}
+                            onChange={(e) => handleResizeByArea(parseInt(e.target.value))}
+                            className="w-full accent-indigo-600 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+                        />
+                        <p className={`text-[9px] text-center ${isHighContrast ? 'opacity-60' : 'text-gray-400'}`}>
+                           Slide to scale zone area based on budget
+                        </p>
+                    </div>
 
                     {currentArea < MIN_ZONE_AREA && (
                       <div className="p-4 bg-red-50 dark:bg-red-900/20 rounded-2xl flex items-center gap-3 border border-red-100 dark:border-red-900/30 animate-pulse">
                         <AlertTriangle size={24} className="text-red-500 shrink-0" />
                         <div className="text-[11px] font-bold text-red-600 leading-snug">
                           Minimum Required: {MIN_ZONE_AREA} m².<br/>
-                          <span className="font-normal text-gray-600 text-[10px]">Your zone is too small to activate. Please enlarge it.</span>
+                          <span className="font-normal text-gray-600 text-[10px]">Your zone is too small. Increase coverage using the slider or map handles.</span>
                         </div>
                       </div>
                     )}
@@ -382,7 +399,7 @@ export const MapView: React.FC<MapViewProps> = ({
                        <p className={`text-[11px] font-black uppercase tracking-widest flex items-center gap-2 ${isHighContrast ? 'opacity-40' : 'text-gray-600'}`}>
                           <Calculator size={14} className="text-gray-600"/> Pricing Plans
                        </p>
-                       <span className={`text-[9px] font-black ${isHighContrast ? 'opacity-30' : 'text-gray-500'}`}>$0.0025 / m² / month</span>
+                       <span className={`text-[9px] font-black ${isHighContrast ? 'opacity-30' : 'text-gray-500'}`}>$1.00 / 10,000 m² / month</span>
                     </div>
 
                     <div className="space-y-3">

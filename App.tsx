@@ -390,8 +390,6 @@ export default function App() {
 
   return (
     <div className={`h-full w-full flex flex-col relative ${isHighContrast ? 'bg-black text-white' : 'bg-gray-50 text-gray-900'}`}>
-      {toast && <div className="fixed top-4 left-4 right-4 z-[5000] p-4 bg-black/80 backdrop-blur-md text-white rounded-2xl shadow-2xl text-center font-black text-xs uppercase tracking-widest animate-in fade-in slide-in-from-top-4" onClick={() => setToast(null)}>{toast}</div>}
-      
       {/* --- Ad Viewing Modal --- */}
       {viewingAd && (
         <div className="fixed inset-0 z-[1000] bg-black flex flex-col animate-in fade-in duration-300">

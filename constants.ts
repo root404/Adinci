@@ -9,8 +9,8 @@ export const PLATFORM_COMMISSION = 0.10; // 10%
 export const DEFAULT_CPM = 15.00; // $15 per 1000 views
 
 // Zone Owner Pricing Restore
-// Base cost: 1 m² per month = 0.0025 USD
-export const ZONE_PRICE_PER_SQM_MONTH = 0.0025;
+// Base cost: 10,000 m² per month = 1 USD => 0.0001 USD per m²
+export const ZONE_PRICE_PER_SQM_MONTH = 0.0001;
 export const MIN_ZONE_AREA = 50;
 
 // Helper to set future date
