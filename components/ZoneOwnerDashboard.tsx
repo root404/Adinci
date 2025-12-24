@@ -480,18 +480,18 @@ export const ZoneOwnerDashboard: React.FC<ZoneOwnerDashboardProps> = ({
         {/* TAB: EARNINGS (WALLET) */}
         {activeTab === 'earnings' && (
            <div className="space-y-4 animate-in fade-in">
-              <div className={`${cardClass} p-6 rounded-3xl bg-indigo-700 text-white border-0 shadow-xl`}>
-                 <p className="text-[10px] font-black opacity-60 uppercase mb-1">Available Funds</p>
+              <div className={`p-6 rounded-3xl shadow-xl ${isHighContrast ? 'bg-gray-900 border-2 border-yellow-400 text-yellow-400' : 'bg-indigo-700 text-white'}`}>
+                 <p className={`text-[10px] font-black uppercase mb-1 ${isHighContrast ? 'opacity-60' : 'text-white/80'}`}>Available Funds</p>
                  <h2 className="text-4xl font-black">${user.balance.toFixed(2)}</h2>
                  <div className="flex gap-2 mt-6">
                     <button 
                       onClick={onWithdraw}
                       disabled={user.balance <= 0}
-                      className="flex-1 py-3 bg-white text-indigo-700 rounded-xl font-black text-[10px] uppercase shadow-md active:scale-95 transition-all disabled:opacity-50 disabled:active:scale-100"
+                      className={`flex-1 py-3 rounded-xl font-black text-[10px] uppercase shadow-md active:scale-95 transition-all disabled:opacity-50 disabled:active:scale-100 ${isHighContrast ? 'bg-yellow-400 text-black' : 'bg-white text-indigo-700'}`}
                     >
                       Withdraw Now
                     </button>
-                    <button className="p-3 bg-white/20 text-white rounded-xl border border-white/10"><History size={18}/></button>
+                    <button className={`p-3 rounded-xl border ${isHighContrast ? 'bg-gray-800 border-yellow-400 text-yellow-400' : 'bg-white/20 text-white border-white/10'}`}><History size={18}/></button>
                  </div>
               </div>
 
@@ -514,7 +514,7 @@ export const ZoneOwnerDashboard: React.FC<ZoneOwnerDashboardProps> = ({
                        <span className="font-black">${(user.totalEarnings! / (1 - PLATFORM_COMMISSION)).toFixed(2)}</span>
                     </div>
                     <div className="flex justify-between text-xs text-red-500">
-                       <span className="font-bold">Platform Fee (20%)</span>
+                       <span className="font-bold">Platform Fee ({(PLATFORM_COMMISSION * 100).toFixed(0)}%)</span>
                        <span className="font-black">-${(user.totalEarnings! / (1 - PLATFORM_COMMISSION) * PLATFORM_COMMISSION).toFixed(2)}</span>
                     </div>
                     <div className="pt-2 border-t border-gray-50 flex justify-between font-black text-indigo-700">

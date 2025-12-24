@@ -5,7 +5,7 @@ import { AdZone, User, UserType, AdRentalRequest } from './types';
 export const DUBAI_CENTER = { lat: 25.1972, lng: 55.2744 };
 
 // Platform Logic
-export const PLATFORM_COMMISSION = 0.20; // 20%
+export const PLATFORM_COMMISSION = 0.10; // 10%
 export const DEFAULT_CPM = 15.00; // $15 per 1000 views
 
 // Zone Owner Pricing Restore

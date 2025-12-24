@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { MapContainer, TileLayer, Circle, Rectangle, Marker, Popup, useMapEvents } from 'react-leaflet';
 import L from 'leaflet';
 import { AdZone, GeoPoint, UserType, ZoneShape } from '../types';
@@ -6,7 +6,7 @@ import { DUBAI_CENTER, ZONE_PRICE_PER_SQM_MONTH, MIN_ZONE_AREA } from '../consta
 import { 
   Plus, Square, Circle as CircleIcon, X, Check, Edit2, Trash2, Save, 
   Maximize, CreditCard, DollarSign, Clock, AlertTriangle, ArrowRight, 
-  ShieldCheck, ShoppingBag, Info, TrendingUp, History, Move, Layers, Calculator
+  ShieldCheck, ShoppingBag, Info, TrendingUp, History, Move, Layers, Calculator, GripHorizontal
 } from 'lucide-react';
 
 delete (L.Icon.Default.prototype as any)._getIconUrl;
@@ -23,6 +23,21 @@ const userIcon = new L.Icon({
   iconAnchor: [12, 41],
   popupAnchor: [1, -34],
   shadowSize: [41, 41]
+});
+
+// Custom Icons for Edit Handles
+const resizeIcon = new L.DivIcon({
+  className: '',
+  html: `<div class="w-4 h-4 bg-white border-2 border-indigo-600 rounded-full shadow-lg hover:scale-125 transition-transform cursor-nwse-resize"></div>`,
+  iconSize: [16, 16],
+  iconAnchor: [8, 8]
+});
+
+const moveIcon = new L.DivIcon({
+  className: '',
+  html: `<div class="w-6 h-6 bg-indigo-600/90 text-white rounded-full shadow-xl flex items-center justify-center border-2 border-white cursor-move hover:scale-110 transition-transform"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="5 9 2 12 5 15"></polyline><polyline points="9 5 12 2 15 5"></polyline><polyline points="19 9 22 12 19 15"></polyline><polyline points="9 19 12 22 15 19"></polyline><circle cx="12" cy="12" r="1"></circle></svg></div>`,
+  iconSize: [24, 24],
+  iconAnchor: [12, 12]
 });
 
 const getBounds = (center: GeoPoint, width: number, height: number): L.LatLngBoundsExpression => {
@@ -125,6 +140,20 @@ export const MapView: React.FC<MapViewProps> = ({
      }
   };
 
+  // Helper to calculate handles position
+  const getResizeHandlePosition = (zone: AdZone): [number, number] => {
+    if (zone.shape === 'CIRCLE') {
+      // Place handle on the right edge
+      const lngOffset = (zone.radius) / (111111 * Math.cos(zone.center.lat * Math.PI / 180));
+      return [zone.center.lat, zone.center.lng + lngOffset];
+    } else {
+      // Place handle on top-right corner
+      const latOffset = (zone.height / 2) / 111111;
+      const lngOffset = (zone.width / 2) / (111111 * Math.cos(zone.center.lat * Math.PI / 180));
+      return [zone.center.lat + latOffset, zone.center.lng + lngOffset];
+    }
+  };
+
   const panelClass = isHighContrast 
     ? 'bg-black border-2 border-yellow-400 text-yellow-400' 
     : 'bg-white border border-gray-100 shadow-[0_-12px_40px_rgba(0,0,0,0.15)] text-gray-800';
@@ -137,11 +166,11 @@ export const MapView: React.FC<MapViewProps> = ({
         {zones.map((zone) => {
           const isSelected = zone.id === selectedZoneId;
           const liveZone = isSelected && editingZone ? editingZone : zone;
-          // Updated active color to Blue (#3b82f6)
           const color = isSelected ? '#4f46e5' : (zone.isActive ? '#3b82f6' : '#9ca3af');
           
           return (
             <React.Fragment key={zone.id}>
+              {/* SHAPE RENDER */}
               {liveZone.shape === 'CIRCLE' ? (
                 <Circle 
                   center={[liveZone.center.lat, liveZone.center.lng]} 
@@ -151,9 +180,7 @@ export const MapView: React.FC<MapViewProps> = ({
                     click: (e) => { 
                       L.DomEvent.stopPropagation(e); 
                       setSelectedZoneId(zone.id); 
-                      if (userType === UserType.REGULAR) {
-                         onUserMove({ lat: e.latlng.lat, lng: e.latlng.lng });
-                      }
+                      if (userType === UserType.REGULAR) onUserMove({ lat: e.latlng.lat, lng: e.latlng.lng });
                     } 
                   }} 
                 />
@@ -165,12 +192,63 @@ export const MapView: React.FC<MapViewProps> = ({
                     click: (e) => { 
                       L.DomEvent.stopPropagation(e); 
                       setSelectedZoneId(zone.id); 
-                      if (userType === UserType.REGULAR) {
-                         onUserMove({ lat: e.latlng.lat, lng: e.latlng.lng });
-                      }
+                      if (userType === UserType.REGULAR) onUserMove({ lat: e.latlng.lat, lng: e.latlng.lng });
                     } 
                   }} 
                 />
+              )}
+
+              {/* EDIT HANDLES - Only for Zone Owner & Selected */}
+              {isSelected && userType === UserType.ZONE_OWNER && (
+                <>
+                  {/* Center Move Handle */}
+                  <Marker 
+                    position={[liveZone.center.lat, liveZone.center.lng]}
+                    icon={moveIcon}
+                    draggable={true}
+                    eventHandlers={{
+                      drag: (e) => {
+                        const newPos = e.target.getLatLng();
+                        handleUpdateField('center', { lat: newPos.lat, lng: newPos.lng });
+                      }
+                    }}
+                  />
+
+                  {/* Resize Handle */}
+                  <Marker 
+                    position={getResizeHandlePosition(liveZone)}
+                    icon={resizeIcon}
+                    draggable={true}
+                    eventHandlers={{
+                      drag: (e) => {
+                        const handleLat = e.target.getLatLng().lat;
+                        const handleLng = e.target.getLatLng().lng;
+                        const center = liveZone.center;
+
+                        if (liveZone.shape === 'CIRCLE') {
+                           // Calculate new radius in meters
+                           const newRadius = e.target.getLatLng().distanceTo([center.lat, center.lng]);
+                           handleUpdateField('radius', Math.round(newRadius));
+                        } else {
+                           // Calculate new Width/Height in meters
+                           // Latitude difference for Height
+                           const latDiff = Math.abs(handleLat - center.lat);
+                           const newHeight = latDiff * 111111 * 2; // * 2 because handle is from center to edge
+
+                           // Longitude difference for Width (adjusting for latitude)
+                           const lngDiff = Math.abs(handleLng - center.lng);
+                           const newWidth = lngDiff * 111111 * Math.cos(center.lat * Math.PI / 180) * 2;
+
+                           if (editingZone) {
+                             const updated = { ...editingZone, width: Math.round(newWidth), height: Math.round(newHeight) };
+                             setEditingZone(updated);
+                             onUpdateZone?.(updated);
+                           }
+                        }
+                      }
+                    }}
+                  />
+                </>
               )}
             </React.Fragment>
           );
