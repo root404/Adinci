@@ -36,6 +36,13 @@ export interface User {
   balance: number; // For Advertiser to spend, Owner to withdraw
   totalEarnings?: number; // For Zone Owners
   escrowBalance?: number; // Funds held from active ads
+  age?: number;
+  gender?: string;
+  location?: {
+    country: string;
+    city: string;
+    zipCode: string;
+  };
 }
 
 export interface GeoPoint {

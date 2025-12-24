@@ -13,7 +13,7 @@ import { PaymentScreen } from './components/PaymentScreen';
 import { 
   Building, ShieldCheck, User as UserIcon, ArrowLeft, AtSign, Phone, Lock, 
   Shield, Loader2, Eye, EyeOff, PlayCircle, Gift, ChevronRight, Play, X, Zap,
-  CheckCircle, Video, Clock, Wallet, Coins, ArrowRightLeft, History, Copy
+  CheckCircle, Video, Clock, Wallet, Coins, ArrowRightLeft, History, Copy, MapPin, Globe, Hash
 } from 'lucide-react';
 
 // Re-using helper functions for cleaner App component
@@ -100,7 +100,19 @@ export default function App() {
   const [toast, setToast] = useState<string | null>(null);
   const [paymentConfig, setPaymentConfig] = useState<{ zone: AdZone, duration: number, price: string } | null>(null);
   const [chats, setChats] = useState<ChatSession[]>([]);
-  const [authForm, setAuthForm] = useState({ name: '', email: '', password: '', confirmPassword: '', phoneNumber: '', isVisuallyImpaired: false });
+  const [authForm, setAuthForm] = useState({ 
+    name: '', 
+    email: '', 
+    password: '', 
+    confirmPassword: '', 
+    phoneNumber: '', 
+    age: '',
+    gender: '',
+    country: '',
+    city: '',
+    zipCode: '',
+    isVisuallyImpaired: false 
+  });
   const [selectedZoneId, setSelectedZoneId] = useState<string | null>(null);
   const [advertiserTargetZone, setAdvertiserTargetZone] = useState<AdZone | null>(null);
   const [isLoadingAuth, setIsLoadingAuth] = useState(false);
@@ -182,6 +194,13 @@ export default function App() {
           type: selectedRole, 
           email: authForm.email, 
           phoneNumber: authForm.phoneNumber, 
+          age: authForm.age ? parseInt(authForm.age) : undefined,
+          gender: authForm.gender,
+          location: {
+             country: authForm.country,
+             city: authForm.city,
+             zipCode: authForm.zipCode
+          },
           bio: "Just joined Adinci!", 
           settings: { isVisuallyImpaired: authForm.isVisuallyImpaired || isHighContrast }, 
           points: 0, 
@@ -547,6 +566,77 @@ export default function App() {
                                         placeholder="+971 -- --- ----" 
                                         value={authForm.phoneNumber}
                                         onChange={e => setAuthForm({...authForm, phoneNumber: e.target.value})}
+                                        className={`w-full pl-11 pr-4 py-3.5 rounded-2xl border outline-none transition-all font-bold text-sm ${isHighContrast ? 'bg-black border-yellow-400 text-white focus:border-white' : 'bg-gray-50 border-gray-100 focus:border-indigo-600 focus:bg-white'}`}
+                                     />
+                                  </div>
+                               </div>
+
+                               {/* NEW FIELDS: AGE, GENDER, LOCATION */}
+                               <div className="grid grid-cols-2 gap-4">
+                                  <div className="space-y-1">
+                                    <label className={`text-[10px] font-black uppercase tracking-widest ml-1 ${isHighContrast ? 'text-yellow-400' : 'text-gray-600'}`}>Age</label>
+                                    <div className="relative">
+                                       <Hash className={`absolute left-4 top-1/2 -translate-y-1/2 ${isHighContrast ? 'text-yellow-400 opacity-60' : 'text-gray-500'}`} size={16}/>
+                                       <input 
+                                          type="number" 
+                                          placeholder="Age" 
+                                          value={authForm.age}
+                                          onChange={e => setAuthForm({...authForm, age: e.target.value})}
+                                          className={`w-full pl-11 pr-4 py-3.5 rounded-2xl border outline-none transition-all font-bold text-sm ${isHighContrast ? 'bg-black border-yellow-400 text-white focus:border-white' : 'bg-gray-50 border-gray-100 focus:border-indigo-600 focus:bg-white'}`}
+                                       />
+                                    </div>
+                                  </div>
+                                  <div className="space-y-1">
+                                    <label className={`text-[10px] font-black uppercase tracking-widest ml-1 ${isHighContrast ? 'text-yellow-400' : 'text-gray-600'}`}>Gender</label>
+                                    <div className="relative">
+                                        <select 
+                                           value={authForm.gender}
+                                           onChange={e => setAuthForm({...authForm, gender: e.target.value})}
+                                           className={`w-full pl-4 pr-8 py-3.5 rounded-2xl border outline-none transition-all font-bold text-sm appearance-none ${isHighContrast ? 'bg-black border-yellow-400 text-white focus:border-white' : 'bg-gray-50 border-gray-100 focus:border-indigo-600 focus:bg-white text-gray-900'}`}
+                                        >
+                                           <option value="">Select</option>
+                                           <option value="Male">Male</option>
+                                           <option value="Female">Female</option>
+                                        </select>
+                                        <ChevronRight className={`absolute right-4 top-1/2 -translate-y-1/2 rotate-90 pointer-events-none ${isHighContrast ? 'text-yellow-400 opacity-60' : 'text-gray-500'}`} size={16}/>
+                                    </div>
+                                  </div>
+                               </div>
+                               
+                               <div className="space-y-1">
+                                  <label className={`text-[10px] font-black uppercase tracking-widest ml-1 ${isHighContrast ? 'text-yellow-400' : 'text-gray-600'}`}>Country & City</label>
+                                  <div className="grid grid-cols-2 gap-2">
+                                     <div className="relative">
+                                        <Globe className={`absolute left-4 top-1/2 -translate-y-1/2 ${isHighContrast ? 'text-yellow-400 opacity-60' : 'text-gray-500'}`} size={16}/>
+                                        <input 
+                                            type="text" 
+                                            placeholder="Country" 
+                                            value={authForm.country}
+                                            onChange={e => setAuthForm({...authForm, country: e.target.value})}
+                                            className={`w-full pl-11 pr-2 py-3.5 rounded-2xl border outline-none transition-all font-bold text-sm ${isHighContrast ? 'bg-black border-yellow-400 text-white focus:border-white' : 'bg-gray-50 border-gray-100 focus:border-indigo-600 focus:bg-white'}`}
+                                        />
+                                     </div>
+                                     <div className="relative">
+                                        <input 
+                                            type="text" 
+                                            placeholder="City" 
+                                            value={authForm.city}
+                                            onChange={e => setAuthForm({...authForm, city: e.target.value})}
+                                            className={`w-full px-4 py-3.5 rounded-2xl border outline-none transition-all font-bold text-sm ${isHighContrast ? 'bg-black border-yellow-400 text-white focus:border-white' : 'bg-gray-50 border-gray-100 focus:border-indigo-600 focus:bg-white'}`}
+                                        />
+                                     </div>
+                                  </div>
+                               </div>
+
+                               <div className="space-y-1">
+                                  <label className={`text-[10px] font-black uppercase tracking-widest ml-1 ${isHighContrast ? 'text-yellow-400' : 'text-gray-600'}`}>Zip Code</label>
+                                  <div className="relative">
+                                     <MapPin className={`absolute left-4 top-1/2 -translate-y-1/2 ${isHighContrast ? 'text-yellow-400 opacity-60' : 'text-gray-500'}`} size={16}/>
+                                     <input 
+                                        type="text" 
+                                        placeholder="00000" 
+                                        value={authForm.zipCode}
+                                        onChange={e => setAuthForm({...authForm, zipCode: e.target.value})}
                                         className={`w-full pl-11 pr-4 py-3.5 rounded-2xl border outline-none transition-all font-bold text-sm ${isHighContrast ? 'bg-black border-yellow-400 text-white focus:border-white' : 'bg-gray-50 border-gray-100 focus:border-indigo-600 focus:bg-white'}`}
                                      />
                                   </div>
