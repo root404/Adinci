@@ -419,6 +419,8 @@ export default function App() {
                   className="w-full h-full object-contain"
                   autoPlay 
                   playsInline
+                  muted
+                  controls
                   onEnded={() => setWatchProgress(100)} 
                 />
              ) : (
